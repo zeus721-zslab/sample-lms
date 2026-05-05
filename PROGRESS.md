@@ -654,10 +654,14 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 
 ## STEP 28: GitHub 배포 및 CI/CD 설정 (2026-05-05)
 - [x] STEP 28-1: .gitignore 작성 (zslab-chat 제외 포함)
-- [ ] STEP 28-2: 디버그 console.log 제거 (AdminChatWidget)
-- [ ] STEP 28-3: .env.example 최신화 (CHAT_INTERNAL_SECRET 등 누락 키 추가)
-- [ ] STEP 28-4: git init + 첫 커밋 + push
+- [x] STEP 28-2: 디버그 console.log 제거 (AdminChatWidget)
+- [x] STEP 28-3: .env.example 최신화 (CHAT_INTERNAL_SECRET 등 누락 키 추가)
+- [x] STEP 28-4: git init + 첫 커밋 (321 files, 48055 insertions)
 - [ ] STEP 28-5: CI/CD 시크릿 목록 확인 + 워크플로우 점검
+
+## STEP 29: ESLint 규칙 warn 완화 (2026-05-05)
+- [ ] STEP 29-1: eslint.config.mjs에 warn 오버라이드 추가
+- [ ] STEP 29-2: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
