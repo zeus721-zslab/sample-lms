@@ -675,13 +675,17 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 31-4: git commit + push (9cc2478)
 
 ## STEP 32: CI 에러 3차 수정 (2026-05-05)
-- [ ] STEP 32-1: ci.yml storage mkdir 추가
-- [ ] STEP 32-2: enrollments/page.tsx &quot; 교체
-- [ ] STEP 32-3: layout.tsx Link 교체 + useRef(Date.now()) 수정
-- [ ] STEP 32-4: login/page.tsx eslint-disable 주석 + Link 교체
-- [ ] STEP 32-5: take/page.tsx doSubmit 선언 순서 이동
-- [ ] STEP 32-6: AdminChatWidget.tsx lastDateLabel → useRef
-- [ ] STEP 32-7: git commit + push
+- [x] STEP 32-1: ci.yml storage mkdir 추가
+- [x] STEP 32-2: enrollments/page.tsx &quot; 교체
+- [x] STEP 32-3: layout.tsx Link 교체 + useRef(Date.now()) 수정
+- [x] STEP 32-4: login/page.tsx eslint-disable 주석 + Link 교체
+- [x] STEP 32-5: take/page.tsx doSubmit 선언 순서 이동
+- [x] STEP 32-6: AdminChatWidget.tsx lastDateLabel → useRef
+- [x] STEP 32-7: git commit + push (9f8aea0)
+
+## STEP 33: AdminChatWidget ref 에러 수정 (2026-05-05)
+- [ ] STEP 33-1: useRef 제거, msgs.map 직전 지역 변수로 교체
+- [ ] STEP 33-2: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

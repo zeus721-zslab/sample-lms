@@ -82,9 +82,6 @@ function ChatRoomPanel({
     setInput('')
   }, [socket, input, roomId])
 
-  const lastDateLabelRef = useRef('')
-  lastDateLabelRef.current = ''
-
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-2 px-3 py-2.5 border-b shrink-0">
@@ -99,11 +96,13 @@ function ChatRoomPanel({
         {msgs.length === 0 && (
           <p className="text-center text-muted-foreground text-xs py-8">메시지가 없습니다.</p>
         )}
-        {msgs.map((msg, i) => {
+        {(() => {
+          let lastDateLabel = ''
+          return msgs.map((msg, i) => {
           const isMine = msg.sender_type === 'admin'
           const dateLabel = formatDateLabel(msg.created_at)
-          const showDate = dateLabel !== lastDateLabelRef.current
-          if (showDate) lastDateLabelRef.current = dateLabel
+          const showDate = dateLabel !== lastDateLabel
+          if (showDate) lastDateLabel = dateLabel
           const prev = msgs[i - 1]
           const isConsecutive = !showDate && prev && prev.sender_type === msg.sender_type
 
@@ -133,7 +132,8 @@ function ChatRoomPanel({
               </div>
             </div>
           )
-        })}
+        })
+        })()}
         <div ref={bottomRef} />
       </div>
 
