@@ -1,0 +1,60 @@
+# =============================================
+# Caddyfile — LMS 내부 path-based 라우팅
+# gateway_nginx → lms_caddy:8080 → 하위 서비스
+# =============================================
+
+{
+    # 내부 only — TLS 사용 안 함 (gateway_nginx가 TLS 종단)
+    auto_https off
+    admin off
+}
+
+:8080 {
+    # ── 헬스체크 ──────────────────────────────
+    handle /healthz {
+        respond "ok" 200
+    }
+
+    # ── Laravel API (/api/*) ──────────────────
+    handle /api/* {
+        reverse_proxy lms_php:80 {
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto https
+        }
+    }
+
+    # ── Laravel Sanctum (쿠키 기반 auth) ──────
+    handle /sanctum/* {
+        reverse_proxy lms_php:80 {
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto https
+        }
+    }
+
+    # ── Next.js 프론트엔드 (나머지 전부) ────────
+    handle /* {
+        reverse_proxy lms_frontend:3000 {
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto https
+        }
+    }
+
+    # 공통 응답 헤더
+    header {
+        -Server
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    }
+
+    # 액세스 로그
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}

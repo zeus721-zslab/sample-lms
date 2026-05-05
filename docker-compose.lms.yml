@@ -1,0 +1,192 @@
+# =============================================
+# zslab LMS — Docker Compose
+# 실행: docker compose -f docker-compose.lms.yml up -d
+# =============================================
+
+networks:
+  # LMS 내부 전용 네트워크
+  lms_net:
+    name: lms_net
+    driver: bridge
+
+  # 기존 zslab 인프라 (MariaDB · Redis · ES) 재활용 — external
+  zslab_net:
+    name: zslab_zslab_net
+    external: true
+
+  # gateway_nginx와 통신 — external
+  gateway_net:
+    name: gateway_net
+    external: true
+
+services:
+
+  # ── Caddy (내부 라우터) ─────────────────────
+  lms_caddy:
+    image: caddy:2-alpine
+    container_name: lms_caddy
+    restart: unless-stopped
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - lms_net
+      - gateway_net
+    depends_on:
+      lms_php:
+        condition: service_healthy
+      lms_frontend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ── FrankenPHP / Laravel ────────────────────
+  lms_php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: lms_php:latest
+    container_name: lms_php
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SERVER_NAME: ":80"
+    volumes:
+      - ./backend:/app:cached
+      - ./backend/storage:/app/storage
+    networks:
+      - lms_net
+      - zslab_net          # MariaDB · Redis · ES 접근
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/api/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ── Next.js 프론트엔드 ──────────────────────
+  lms_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://zslab-lms.duckdns.org/api}
+        NEXT_PUBLIC_SOCKET_URL: ${NEXT_PUBLIC_SOCKET_URL:-wss://zslab-lms.duckdns.org/ws}
+        NEXT_PUBLIC_CHAT_URL: ${NEXT_PUBLIC_CHAT_URL:-https://zslab-lms.duckdns.org}
+    image: lms_frontend:latest
+    container_name: lms_frontend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_BASE_URL: http://lms_php:80/api   # 서버 컴포넌트용 내부 URL
+    networks:
+      - lms_net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # ── Socket.io 실시간 서버 ───────────────────
+  lms_realtime:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    image: lms_realtime:latest
+    container_name: lms_realtime
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: 3001
+    networks:
+      - lms_net
+      - gateway_net        # gateway_nginx에서 직접 접근
+      - zslab_net          # Redis pub/sub 접근
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── zslab-chat (1:1 문의 채팅) ─────────────
+  lms_chat:
+    image: node:20-alpine
+    container_name: lms_chat
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "npm install --omit=dev && node server/index.js"
+    volumes:
+      - ./zslab-chat:/app:rw
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      JWT_SECRET: ${CHAT_JWT_SECRET}
+      INTERNAL_SECRET: ${CHAT_INTERNAL_SECRET}
+      DB_HOST: zslab_mariadb
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - lms_net
+      - zslab_net          # zslab_mariadb 접근
+      - gateway_net        # gateway_nginx에서 직접 접근
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3002/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ── Laravel Queue Worker ────────────────────
+  lms_queue:
+    image: lms_php:latest
+    container_name: lms_queue
+    restart: unless-stopped
+    env_file: .env
+    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+    volumes:
+      - ./backend:/app:cached
+    networks:
+      - lms_net
+      - zslab_net
+    depends_on:
+      lms_php:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  # ── Laravel Scheduler ──────────────────────
+  lms_scheduler:
+    image: lms_php:latest
+    container_name: lms_scheduler
+    restart: unless-stopped
+    env_file: .env
+    command: >
+      sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    volumes:
+      - ./backend:/app:cached
+    networks:
+      - lms_net
+      - zslab_net
+    depends_on:
+      lms_php:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+volumes:
+  caddy_data:
+    name: lms_caddy_data
+  caddy_config:
+    name: lms_caddy_config

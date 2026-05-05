@@ -1,0 +1,57 @@
+# ──────────────────────────────────────────────
+# zslab LMS — .gitignore
+# ──────────────────────────────────────────────
+
+# 환경변수 (절대 커밋 금지)
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# ── Backend (Laravel) ─────────────────────────
+backend/vendor/
+backend/.phpunit.cache/
+backend/.phpunit.result.cache
+backend/storage/logs/*.log
+backend/storage/app/public/
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/bootstrap/cache/*.php
+backend/public/build/
+backend/public/hot
+backend/public/storage
+backend/coverage.xml
+
+# ── Frontend (Next.js) ────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+frontend/coverage/
+
+# ── Node.js 실시간 서버 ───────────────────────
+node-realtime/node_modules/
+
+# ── zslab-chat (별도 저장소) ──────────────────
+zslab-chat/
+
+# ── Docker 볼륨·런타임 데이터 ─────────────────
+docker/caddy/data/
+docker/caddy/config/
+
+# ── OS / IDE ──────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── 빌드 산출물 ──────────────────────────────
+*.log
+*.cache
+dist/
+tmp/

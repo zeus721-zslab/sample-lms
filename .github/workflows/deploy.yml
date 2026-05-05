@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: zslab-lms
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
+          timeout: 300s
+          script: |
+            set -euo pipefail
+            cd /home/zslab-lms
+
+            echo "=== [1/6] 코드 갱신 ==="
+            git pull origin main
+
+            echo "=== [2/6] 이미지 빌드 ==="
+            docker compose -f docker-compose.lms.yml build
+
+            echo "=== [3/6] 무중단 롤링 업데이트 ==="
+            docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_php
+            docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_frontend
+            docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_realtime
+
+            echo "=== [4/6] 마이그레이션 ==="
+            docker exec lms_php php artisan migrate --force
+
+            echo "=== [5/6] 캐시 정리 ==="
+            docker exec lms_php php artisan optimize
+            docker exec lms_php php artisan queue:restart
+
+            echo "=== [6/6] 컨테이너 상태 ==="
+            docker compose -f docker-compose.lms.yml ps
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "배포 실패! 로그를 확인하세요."

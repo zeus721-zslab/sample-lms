@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Faq extends Model
+{
+    protected $fillable = ['category', 'question', 'answer', 'order_no', 'is_published'];
+
+    protected $casts = [
+        'is_published' => 'boolean',
+        'order_no'     => 'integer',
+    ];
+}
