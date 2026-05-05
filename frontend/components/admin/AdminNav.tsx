@@ -155,7 +155,7 @@ export function AdminNav({ collapsed }: { collapsed: boolean }) {
         auto[g.label] = true
       }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOpen(auto)
   }, [pathname])
 

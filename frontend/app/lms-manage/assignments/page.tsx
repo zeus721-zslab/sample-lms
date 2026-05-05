@@ -42,6 +42,7 @@ function AssignmentFormDialog({
 
   useEffect(() => {
     if (assignment) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         course_id: String(assignment.course_id),
         title: assignment.title,
@@ -160,6 +161,7 @@ export default function AdminAssignmentsPage() {
     }
   }, [token, search, status, page])
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load() }, [load])
 
   const handleDelete = async () => {

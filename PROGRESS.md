@@ -664,9 +664,15 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 29-2: git commit + push (b25dcbc)
 
 ## STEP 30: CI 에러 수정 (2026-05-05)
-- [ ] STEP 30-1: ci.yml PHP 8.3 → 8.4
-- [ ] STEP 30-2: AdminShell/AdminNav/CommandPalette eslint-disable 주석 추가
-- [ ] STEP 30-3: git commit + push
+- [x] STEP 30-1: ci.yml PHP 8.3 → 8.4
+- [x] STEP 30-2: AdminShell/AdminNav/CommandPalette eslint-disable 주석 추가
+- [x] STEP 30-3: git commit + push (bbc9985)
+
+## STEP 31: CI 에러 재수정 (2026-05-05)
+- [ ] STEP 31-1: ci.yml --parallel 제거
+- [ ] STEP 31-2: eslint.config.mjs react-hooks/set-state-in-effect off
+- [ ] STEP 31-3: 6개 파일 eslint-disable 주석 추가/교정
+- [ ] STEP 31-4: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
