@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -95,6 +96,7 @@ function AdminLoginForm() {
   const onSubmit = async (data: FormValues) => {
     const lock = getLockState()
 
+    // eslint-disable-next-line react-hooks/purity
     if (Date.now() < lock.lockedUntil) {
       toast.error('로그인이 잠금 상태입니다. 잠시 후 다시 시도해주세요.')
       return
@@ -123,6 +125,7 @@ function AdminLoginForm() {
       const willLock = newAttempts >= MAX_ATTEMPTS
       const newLock = {
         attempts: newAttempts,
+        // eslint-disable-next-line react-hooks/purity
         lockedUntil: willLock ? Date.now() + LOCK_MS : lock.lockedUntil,
       }
       saveLockState(newLock)
@@ -178,6 +181,7 @@ function AdminLoginForm() {
         )}
 
         {/* 폼 */}
+        {/* eslint-disable-next-line react-hooks/refs */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="email" className="text-sm text-zinc-300">이메일</Label>
@@ -232,9 +236,9 @@ function AdminLoginForm() {
         {/* 학습자 사이트 링크 */}
         <p className="text-center text-xs text-zinc-600">
           학습자 사이트는{' '}
-          <a href="/" className="text-zinc-400 hover:text-white transition-colors underline underline-offset-2">
+          <Link href="/" className="text-zinc-400 hover:text-white transition-colors underline underline-offset-2">
             여기
-          </a>
+          </Link>
           에서 접속하세요.
         </p>
       </div>

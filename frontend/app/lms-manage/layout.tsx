@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/store/auth'
 import { AdminShell } from '@/components/admin/AdminShell'
@@ -22,7 +23,7 @@ function NotFoundScreen() {
         <p className="text-8xl font-bold text-muted-foreground/30 select-none">404</p>
         <h1 className="text-xl font-semibold">페이지를 찾을 수 없습니다</h1>
         <p className="text-sm text-muted-foreground">요청하신 페이지가 존재하지 않거나 삭제되었습니다.</p>
-        <a href="/" className="inline-block mt-2 text-sm text-primary hover:underline">홈으로 돌아가기</a>
+        <Link href="/" className="inline-block mt-2 text-sm text-primary hover:underline">홈으로 돌아가기</Link>
       </div>
     </div>
   )
@@ -32,7 +33,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user, token, isLoaded, logout } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
-  const lastActivityRef = useRef(Date.now())
+  const lastActivityRef = useRef(0)
+
+  useEffect(() => { lastActivityRef.current = Date.now() }, [])
 
   const isLoginPage = pathname === '/lms-manage/login'
   const isAdmin = user?.roles.includes('admin') ?? false

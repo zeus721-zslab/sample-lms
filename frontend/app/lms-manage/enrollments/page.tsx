@@ -197,7 +197,7 @@ export default function EnrollmentsPage() {
           </DialogHeader>
           <div className="py-3 space-y-2">
             <p className="text-sm text-muted-foreground">
-              <strong>{statusTarget?.user?.name}</strong>의 "<strong>{statusTarget?.course?.title}</strong>" 수강 상태를 변경합니다.
+              <strong>{statusTarget?.user?.name}</strong>의 &quot;<strong>{statusTarget?.course?.title}</strong>&quot; 수강 상태를 변경합니다.
             </p>
             <div className="space-y-1">
               <Label>새 상태</Label>

@@ -82,7 +82,8 @@ function ChatRoomPanel({
     setInput('')
   }, [socket, input, roomId])
 
-  let lastDateLabel = ''
+  const lastDateLabelRef = useRef('')
+  lastDateLabelRef.current = ''
 
   return (
     <div className="flex flex-col h-full">
@@ -101,8 +102,8 @@ function ChatRoomPanel({
         {msgs.map((msg, i) => {
           const isMine = msg.sender_type === 'admin'
           const dateLabel = formatDateLabel(msg.created_at)
-          const showDate = dateLabel !== lastDateLabel
-          if (showDate) lastDateLabel = dateLabel
+          const showDate = dateLabel !== lastDateLabelRef.current
+          if (showDate) lastDateLabelRef.current = dateLabel
           const prev = msgs[i - 1]
           const isConsecutive = !showDate && prev && prev.sender_type === msg.sender_type
 

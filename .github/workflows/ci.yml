@@ -53,6 +53,9 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Prepare storage directories
+        run: mkdir -p backend/storage/framework/{cache,sessions,views,testing} && chmod -R 777 backend/storage backend/bootstrap/cache
+
       - name: Run migrations
         working-directory: backend
         env:

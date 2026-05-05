@@ -669,10 +669,19 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 30-3: git commit + push (bbc9985)
 
 ## STEP 31: CI 에러 재수정 (2026-05-05)
-- [ ] STEP 31-1: ci.yml --parallel 제거
-- [ ] STEP 31-2: eslint.config.mjs react-hooks/set-state-in-effect off
-- [ ] STEP 31-3: 6개 파일 eslint-disable 주석 추가/교정
-- [ ] STEP 31-4: git commit + push
+- [x] STEP 31-1: ci.yml --parallel 제거
+- [x] STEP 31-2: eslint.config.mjs react-hooks/set-state-in-effect off
+- [x] STEP 31-3: 6개 파일 eslint-disable 주석 추가/교정
+- [x] STEP 31-4: git commit + push (9cc2478)
+
+## STEP 32: CI 에러 3차 수정 (2026-05-05)
+- [ ] STEP 32-1: ci.yml storage mkdir 추가
+- [ ] STEP 32-2: enrollments/page.tsx &quot; 교체
+- [ ] STEP 32-3: layout.tsx Link 교체 + useRef(Date.now()) 수정
+- [ ] STEP 32-4: login/page.tsx eslint-disable 주석 + Link 교체
+- [ ] STEP 32-5: take/page.tsx doSubmit 선언 순서 이동
+- [ ] STEP 32-6: AdminChatWidget.tsx lastDateLabel → useRef
+- [ ] STEP 32-7: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

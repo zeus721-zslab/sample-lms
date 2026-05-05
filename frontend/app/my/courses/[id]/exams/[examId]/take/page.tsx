@@ -195,16 +195,6 @@ export default function ExamTakePage() {
     examData?.exam.duration_min ?? 30,
   )
 
-  // 자동 제출 (타이머 0)
-  useEffect(() => {
-    if (remain === 0 && examData && !autoSubmittedRef.current) {
-      autoSubmittedRef.current = true
-      toast.warning('시간이 종료되어 자동 제출됩니다.')
-      doSubmit()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [remain, examData])
-
   const doSubmit = useCallback(async () => {
     if (!token || !examData) return
     setSubmitting(true)
@@ -223,6 +213,16 @@ export default function ExamTakePage() {
       setSubmitting(false)
     }
   }, [token, examData, answers, examId, enrollmentId, router])
+
+  // 자동 제출 (타이머 0)
+  useEffect(() => {
+    if (remain === 0 && examData && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true
+      toast.warning('시간이 종료되어 자동 제출됩니다.')
+      doSubmit()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remain, examData])
 
   if (!isLoaded || loading || !examData) {
     return (
