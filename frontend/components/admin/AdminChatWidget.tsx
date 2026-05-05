@@ -97,42 +97,42 @@ function ChatRoomPanel({
           <p className="text-center text-muted-foreground text-xs py-8">메시지가 없습니다.</p>
         )}
         {(() => {
-          let lastDateLabel = ''
+          const dateLabels = msgs.map((msg) => formatDateLabel(msg.created_at))
+          const showDates = dateLabels.map((label, i) => i === 0 || label !== dateLabels[i - 1])
           return msgs.map((msg, i) => {
-          const isMine = msg.sender_type === 'admin'
-          const dateLabel = formatDateLabel(msg.created_at)
-          const showDate = dateLabel !== lastDateLabel
-          if (showDate) lastDateLabel = dateLabel
-          const prev = msgs[i - 1]
-          const isConsecutive = !showDate && prev && prev.sender_type === msg.sender_type
+            const isMine = msg.sender_type === 'admin'
+            const dateLabel = dateLabels[i]
+            const showDate = showDates[i]
+            const prev = msgs[i - 1]
+            const isConsecutive = !showDate && prev && prev.sender_type === msg.sender_type
 
-          return (
-            <div key={msg.id}>
-              {showDate && <DateSeparator date={dateLabel} />}
-              <div className={cn('flex gap-2', isMine ? 'justify-end' : 'justify-start', isConsecutive && 'mt-0.5')}>
-                {!isMine && !isConsecutive && <AvatarCircle name={roomName} size="sm" />}
-                {!isMine && isConsecutive && <div className="w-7" />}
-                <div>
-                  <div className={cn(
-                    'max-w-[200px] px-3 py-1.5 text-sm leading-relaxed break-words',
-                    isMine ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-sm' : 'bg-muted rounded-2xl rounded-bl-sm',
-                  )}>
-                    {msg.message}
+            return (
+              <div key={msg.id}>
+                {showDate && <DateSeparator date={dateLabel} />}
+                <div className={cn('flex gap-2', isMine ? 'justify-end' : 'justify-start', isConsecutive && 'mt-0.5')}>
+                  {!isMine && !isConsecutive && <AvatarCircle name={roomName} size="sm" />}
+                  {!isMine && isConsecutive && <div className="w-7" />}
+                  <div>
+                    <div className={cn(
+                      'max-w-[200px] px-3 py-1.5 text-sm leading-relaxed break-words',
+                      isMine ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-sm' : 'bg-muted rounded-2xl rounded-bl-sm',
+                    )}>
+                      {msg.message}
+                    </div>
+                    {(() => {
+                      const next = msgs[i + 1]
+                      const isLast = !next || next.sender_type !== msg.sender_type || dateLabels[i + 1] !== dateLabel
+                      return isLast ? (
+                        <p className={cn('text-[10px] text-muted-foreground mt-0.5', isMine ? 'text-right' : 'text-left')}>
+                          {formatTime(msg.created_at)}
+                        </p>
+                      ) : null
+                    })()}
                   </div>
-                  {(() => {
-                    const next = msgs[i + 1]
-                    const isLast = !next || next.sender_type !== msg.sender_type || formatDateLabel(next.created_at) !== dateLabel
-                    return isLast ? (
-                      <p className={cn('text-[10px] text-muted-foreground mt-0.5', isMine ? 'text-right' : 'text-left')}>
-                        {formatTime(msg.created_at)}
-                      </p>
-                    ) : null
-                  })()}
                 </div>
               </div>
-            </div>
-          )
-        })
+            )
+          })
         })()}
         <div ref={bottomRef} />
       </div>

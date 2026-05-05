@@ -684,8 +684,12 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 32-7: git commit + push (9f8aea0)
 
 ## STEP 33: AdminChatWidget ref 에러 수정 (2026-05-05)
-- [ ] STEP 33-1: useRef 제거, msgs.map 직전 지역 변수로 교체
-- [ ] STEP 33-2: git commit + push
+- [x] STEP 33-1: msgs.map을 IIFE로 감싸 lastDateLabel 지역 변수로 처리
+- [x] STEP 33-2: git commit + push (9dccb58)
+
+## STEP 34: AdminChatWidget lastDateLabel 재할당 에러 수정 (2026-05-05)
+- [ ] STEP 34-1: dateLabels/showDates 사전 계산 후 map에서 참조
+- [ ] STEP 34-2: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
