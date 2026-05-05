@@ -55,3 +55,16 @@ Thumbs.db
 *.cache
 dist/
 tmp/
+
+# 홈 디렉토리 시스템 파일
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+.ssh/
+.claude/
+.config/
+.local/
+.cache/
+*.pem
+*.key
