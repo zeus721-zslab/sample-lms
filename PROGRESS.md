@@ -660,8 +660,13 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [ ] STEP 28-5: CI/CD 시크릿 목록 확인 + 워크플로우 점검
 
 ## STEP 29: ESLint 규칙 warn 완화 (2026-05-05)
-- [ ] STEP 29-1: eslint.config.mjs에 warn 오버라이드 추가
-- [ ] STEP 29-2: git commit + push
+- [x] STEP 29-1: eslint.config.mjs에 warn 오버라이드 추가
+- [x] STEP 29-2: git commit + push (b25dcbc)
+
+## STEP 30: CI 에러 수정 (2026-05-05)
+- [ ] STEP 30-1: ci.yml PHP 8.3 → 8.4
+- [ ] STEP 30-2: AdminShell/AdminNav/CommandPalette eslint-disable 주석 추가
+- [ ] STEP 30-3: git commit + push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

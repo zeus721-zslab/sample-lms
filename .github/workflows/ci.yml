@@ -9,7 +9,7 @@ on:
 jobs:
   # ── Laravel 백엔드 테스트 ─────────────────────
   backend:
-    name: Backend (PHP 8.3)
+    name: Backend (PHP 8.4)
     runs-on: ubuntu-latest
 
     services:
@@ -29,10 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PHP 8.3
+      - name: Setup PHP 8.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           extensions: pdo_mysql, redis, intl, zip, bcmath, gd, opcache, pcntl, sockets, mbstring
           coverage: xdebug
 

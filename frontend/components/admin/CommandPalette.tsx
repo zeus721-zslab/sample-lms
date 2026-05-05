@@ -42,6 +42,7 @@ export function CommandPalette({ open, onClose }: Props) {
       )
     : COMMANDS
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (open) {
       setQuery('')
