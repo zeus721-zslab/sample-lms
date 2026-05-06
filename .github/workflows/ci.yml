@@ -118,6 +118,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: https://zslab-lms.duckdns.org/api
           NEXT_PUBLIC_SOCKET_URL: https://zslab-lms.duckdns.org/ws
+          NEXT_PUBLIC_CHAT_URL: https://zslab-lms.duckdns.org/chat
         run: npm run build
 
   # ── Node.js 실시간 서버 ───────────────────────

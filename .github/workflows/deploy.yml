@@ -40,6 +40,8 @@ jobs:
             docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_php
             docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_frontend
             docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_realtime
+            docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_queue
+            docker compose -f docker-compose.lms.yml up -d --no-deps --build lms_scheduler
 
             echo "=== [4/6] 마이그레이션 ==="
             docker exec lms_php php artisan migrate --force
