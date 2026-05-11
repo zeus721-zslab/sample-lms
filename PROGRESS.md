@@ -650,14 +650,14 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
   - 컨테이너 ERROR 없음 ✓
 
 ## STEP 27: README.md 작성 (2026-05-05)
-- [ ] STEP 27-1: README.md 작성 (8개 섹션)
+- [x] STEP 27-1: README.md 작성 (8개 섹션)
 
 ## STEP 28: GitHub 배포 및 CI/CD 설정 (2026-05-05)
 - [x] STEP 28-1: .gitignore 작성 (zslab-chat 제외 포함)
 - [x] STEP 28-2: 디버그 console.log 제거 (AdminChatWidget)
 - [x] STEP 28-3: .env.example 최신화 (CHAT_INTERNAL_SECRET 등 누락 키 추가)
 - [x] STEP 28-4: git init + 첫 커밋 (321 files, 48055 insertions)
-- [ ] STEP 28-5: CI/CD 시크릿 목록 확인 + 워크플로우 점검
+- [x] STEP 28-5: CI/CD 시크릿 목록 확인 + 워크플로우 점검
 
 ## STEP 29: ESLint 규칙 warn 완화 (2026-05-05)
 - [x] STEP 29-1: eslint.config.mjs에 warn 오버라이드 추가
@@ -688,8 +688,56 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 33-2: git commit + push (9dccb58)
 
 ## STEP 34: AdminChatWidget lastDateLabel 재할당 에러 수정 (2026-05-05)
-- [ ] STEP 34-1: dateLabels/showDates 사전 계산 후 map에서 참조
-- [ ] STEP 34-2: git commit + push
+- [x] STEP 34-1: dateLabels/showDates 사전 계산 후 map에서 참조
+- [x] STEP 34-2: git commit + push
+
+## STEP 35: SiteShell + AdminShell 채팅 위젯 렌더 추가 (2026-05-06)
+- [x] STEP 35-1: SiteShell.tsx — ChatWidget import + 렌더
+- [x] STEP 35-2: AdminShell.tsx — AdminChatWidget import + 렌더
+- [x] STEP 35-3: 빌드 + 배포 + 검증
+
+## STEP 36: 관리자 채팅방 헤더 "회원 정보" 버튼 (2026-05-06)
+- [x] STEP 36-1: ChatRoomPanel에 userId prop 추가 + "회원 정보" 버튼 렌더
+- [x] STEP 36-2: AdminChatWidget에서 userId 상태 관리 + handleEnterRoom 확장
+- [x] STEP 36-3: 빌드 + 배포 + 검증
+
+## STEP 37: CI/CD 워크플로우 수정 (2026-05-06)
+- [x] STEP 37-1: ci.yml Build env에 NEXT_PUBLIC_CHAT_URL 추가
+- [x] STEP 37-2: deploy.yml 롤링 업데이트에 lms_queue/lms_scheduler 추가
+- [x] STEP 37-3: git commit (5bebbd8e)
+
+## STEP 38: EnrollButton "확인 중..." 무한 로딩 버그 수정 (2026-05-11)
+- [x] STEP 38-1: 근본 원인 분석 — zustand v5 toThenable 동기 실행 + useAuthStore 순환 참조
+- [x] STEP 38-2: store/auth.ts 수정 (partialize + _markLoaded 클로저 패턴)
+- [x] STEP 38-3: 빌드 + 배포 + 검증
+  - npm run build 완전 통과 (TypeScript OK, 에러 0) ✓
+  - Docker 이미지 --no-cache 재빌드 + 컨테이너 교체 ✓
+  - /courses 200 ✓, 컨테이너 Ready in 0ms ✓
+
+## STEP 39: 학습 페이지 비정상 video_url 교체 (2026-05-11)
+- [x] STEP 39-1: lessons 테이블 비정상 URL 조회 → example.com 111개 (id 63~173) 발견
+- [x] STEP 39-2: 111개 → devstreaming-cdn.apple.com 테스트 스트림으로 일괄 교체 (tinker)
+- [x] STEP 39-3: 비정상 잔존 0건 확인, Apple CDN 140건 (기존 29 + 신규 111) 검증 완료
+
+## STEP 40: 학습 페이지 시작 버튼 클릭 시 영상 자동 재생 (2026-05-11)
+- [x] STEP 40-1: 시작 버튼 핸들러 + VideoPlayer 연결 부분 확인 — MANIFEST_PARSED에 play() 없음 확인
+- [x] STEP 40-2: VideoPlayer autoPlay prop 추가 + tryPlay() 헬퍼(muted 폴백) + page.tsx autoPlay 전달
+- [x] STEP 40-3: tsc OK, Docker 재빌드 + 배포 + /my/courses/1 200 ✓
+
+## STEP 41: 학습자 페이지 max-width max-w-7xl 통일 + 디자인 개선 (2026-05-11)
+- [x] STEP 41-1: Header.tsx / Footer.tsx max-w-6xl → max-w-7xl
+- [x] STEP 41-2: 학습자 17개 파일 max-w-* → max-w-7xl 일괄 통일 (SiteShell은 컨테이너 없어 제외, 시험 응시 페이지 제외)
+- [x] STEP 41-3: 홈 히어로 px-4 → px-6 sm:px-16 + /courses 그리드 xl:grid-cols-4
+- [x] STEP 41-4: tsc OK, 빌드 성공, / /courses /my/courses /notices /faq /verify /semesters 전부 200 ✓
+
+## STEP 42: Elasticsearch 강좌 검색 연동 (2026-05-11)
+- [x] STEP 42-1: 루트 .env ES 설정 확인 (이미 존재), lms_php zslab_net 연결 확인, ES status=yellow 정상
+- [x] STEP 42-2: elasticsearch/elasticsearch ^8.0 설치 (ES 8.13 호환), ElasticsearchService + config/elasticsearch.php 작성
+- [x] STEP 42-3: CourseIndexer (21개 인덱싱 완료) + CourseObserver (AppServiceProvider 등록) + es:index-courses 커맨드
+- [x] STEP 42-4: CourseController::index() ?q= → ES 전문검색 (ES 장애 시 LIKE 폴백)
+- [x] STEP 42-5: GET /api/courses/suggest → ES completion suggester (LIKE 폴백)
+- [x] STEP 42-6: CourseSearchBar 자동완성 드롭다운 (200ms debounce, 키보드 탐색, 외부클릭 닫기)
+- [x] STEP 42-7: tsc OK, 빌드 성공, SC1~6 전부 통과 — ES 검색/자동완성/일반목록/컨테이너 에러 없음
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

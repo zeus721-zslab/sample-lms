@@ -31,7 +31,7 @@ export default function NoticesPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-10 max-w-4xl">
+    <div className="container mx-auto px-4 py-10 max-w-7xl">
       <h1 className="text-2xl font-bold mb-1">공지사항</h1>
       <p className="text-muted-foreground text-sm mb-6">학습 관련 주요 공지를 확인하세요.</p>
 

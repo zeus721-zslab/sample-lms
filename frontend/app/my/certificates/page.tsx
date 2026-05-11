@@ -134,7 +134,7 @@ export default function MyCertificatesPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-10 space-y-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10 space-y-10">
       {/* 헤더 */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">

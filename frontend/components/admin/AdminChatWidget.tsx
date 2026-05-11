@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/auth'
 import { useAdminChatStore } from '@/store/adminChat'
 import { adminInquiryApi } from '@/lib/api'
 import { Button } from '@/components/ui/button'
-import { MessageCircle, X, Send, ChevronLeft, Circle } from 'lucide-react'
+import { MessageCircle, X, Send, ChevronLeft, Circle, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import type { ChatMessage } from '@/hooks/useChat'
@@ -56,12 +57,15 @@ function formatDateLabel(iso: string) {
 function ChatRoomPanel({
   roomId,
   roomName,
+  userId,
   onBack,
 }: {
   roomId: number
   roomName: string | null
+  userId: number | null
   onBack: () => void
 }) {
+  const router = useRouter()
   const { socket, messages, setMessages, markRoomRead } = useAdminChatStore()
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -90,6 +94,16 @@ function ChatRoomPanel({
         </button>
         <AvatarCircle name={roomName} size="sm" />
         <span className="text-sm font-medium truncate flex-1">{roomName ?? `문의 #${roomId}`}</span>
+        {userId !== null && (
+          <button
+            onClick={() => router.push(`/lms-manage/users/${userId}`)}
+            className="shrink-0 flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground border border-border/60 rounded px-1.5 py-0.5 transition-colors"
+            title="회원 정보 보기"
+          >
+            <ExternalLink className="h-3 w-3" />
+            회원 정보
+          </button>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
@@ -154,7 +168,7 @@ function ChatRoomPanel({
 }
 
 // ── 방 목록 패널 ──────────────────────────────────────────────────────────────
-function RoomListPanel({ onSelect }: { onSelect: (id: number, name: string | null) => void }) {
+function RoomListPanel({ onSelect }: { onSelect: (id: number, name: string | null, userId: number | null) => void }) {
   const { rooms, connected } = useAdminChatStore()
   return (
     <div className="flex flex-col h-full">
@@ -173,7 +187,7 @@ function RoomListPanel({ onSelect }: { onSelect: (id: number, name: string | nul
             <button
               key={room.id}
               className="w-full text-left px-3 py-3 flex items-center gap-2.5 hover:bg-muted/60 border-b transition-colors"
-              onClick={() => onSelect(room.id, name)}
+              onClick={() => onSelect(room.id, name, room.user?.id ?? null)}
             >
               <AvatarCircle name={name} size="md" />
               <div className="flex-1 min-w-0">
@@ -298,6 +312,7 @@ export function AdminChatWidget() {
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [roomName, setRoomName] = useState<string | null>(null)
+  const [roomUserId, setRoomUserId] = useState<number | null>(null)
 
   // 클라이언트 마운트 후에만 렌더 시작 — isOpen 초기값(false)이 SSR HTML에 포함되지 않음
   useEffect(() => {
@@ -308,12 +323,14 @@ export function AdminChatWidget() {
   const handleOpen = useCallback(() => {
     setWidgetRoom(null)   // store 먼저 초기화 → widgetRoomId=null → ChatList 렌더 보장
     setRoomName(null)
+    setRoomUserId(null)
     setIsOpen(true)
   }, [setWidgetRoom])
 
   // 방 진입
-  const handleEnterRoom = useCallback((id: number, name: string | null) => {
+  const handleEnterRoom = useCallback((id: number, name: string | null, userId: number | null) => {
     setRoomName(name)
+    setRoomUserId(userId)
     setWidgetRoom(id)     // widgetRoomId=id → ChatRoom 렌더
   }, [setWidgetRoom])
 
@@ -321,12 +338,14 @@ export function AdminChatWidget() {
   const handleBackToList = useCallback(() => {
     setWidgetRoom(null)   // widgetRoomId=null → ChatList 렌더
     setRoomName(null)
+    setRoomUserId(null)
   }, [setWidgetRoom])
 
   // 위젯 닫기
   const handleClose = useCallback(() => {
     setWidgetRoom(null)
     setRoomName(null)
+    setRoomUserId(null)
     setIsOpen(false)
   }, [setWidgetRoom])
 
@@ -373,6 +392,7 @@ export function AdminChatWidget() {
           <ChatRoomPanel
             roomId={widgetRoomId}
             roomName={roomName}
+            userId={roomUserId}
             onBack={handleBackToList}
           />
         ) : (

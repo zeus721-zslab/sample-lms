@@ -24,6 +24,7 @@ Route::prefix('auth')->group(base_path('routes/api/auth.php'));
 // 공개 카테고리 · 강좌 API
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/courses',            [CourseController::class, 'index']);
+Route::get('/courses/suggest',    [CourseController::class, 'suggest']);
 Route::get('/courses/{slug}',     [CourseController::class, 'show']);
 
 // 학기 공개 API

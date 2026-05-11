@@ -606,6 +606,7 @@ export default function LearningPage() {
             videoUrl={currentLesson?.video_url}
             lessonTitle={currentLesson?.title}
             startTime={startTime}
+            autoPlay
             onTimeTick={(seconds) => {
               watchedRef.current = Math.max(watchedRef.current, seconds)
             }}

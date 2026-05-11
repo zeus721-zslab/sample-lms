@@ -72,7 +72,7 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-8">
+    <div className="container max-w-7xl mx-auto px-4 py-8">
       {/* 헤더 */}
       <div className="flex items-center gap-3 mb-6">
         <ShoppingCart className="h-6 w-6 text-primary" />

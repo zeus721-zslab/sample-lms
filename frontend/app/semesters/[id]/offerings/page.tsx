@@ -142,7 +142,7 @@ export default function OfferingsPage() {
   if (!semester) return null
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8">
+    <div className="container mx-auto max-w-7xl px-4 py-8">
       {/* 브레드크럼 */}
       <Link href="/semesters" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-5">
         <ChevronLeft className="h-4 w-4" /> 학사일정

@@ -22,13 +22,13 @@ export default function NoticeDetailPage() {
       .finally(() => setLoading(false))
   }, [id, router])
 
-  if (loading) return <div className="container mx-auto px-4 py-10 max-w-4xl text-center text-muted-foreground">불러오는 중...</div>
+  if (loading) return <div className="container mx-auto px-4 py-10 max-w-7xl text-center text-muted-foreground">불러오는 중...</div>
   if (!notice) return null
 
   const categoryLabel: Record<string, string> = { general: '일반', system: '시스템', event: '이벤트' }
 
   return (
-    <div className="container mx-auto px-4 py-10 max-w-4xl">
+    <div className="container mx-auto px-4 py-10 max-w-7xl">
       <Button variant="ghost" size="sm" asChild className="mb-4 -ml-2">
         <Link href="/notices"><ChevronLeft className="h-4 w-4 mr-1" />목록</Link>
       </Button>

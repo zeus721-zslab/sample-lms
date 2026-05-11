@@ -28,7 +28,7 @@ import { useAuthStore } from '@/store/auth'
 import { AdminNav } from './AdminNav'
 import { CommandPalette } from './CommandPalette'
 import { KeyboardShortcutsDialog } from './KeyboardShortcutsDialog'
-import { useAdminChatConnection } from './AdminChatWidget'
+import { useAdminChatConnection, AdminChatWidget } from './AdminChatWidget'
 
 const SIDEBAR_KEY = 'admin-sidebar-collapsed'
 
@@ -280,6 +280,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
       {/* 단축키 가이드 */}
       <KeyboardShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+
+      {/* 관리자 채팅 위젯 */}
+      <AdminChatWidget />
 
     </div>
   )

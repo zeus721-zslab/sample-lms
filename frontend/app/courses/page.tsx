@@ -51,7 +51,7 @@ export default async function CoursesPage({ searchParams }: PageProps) {
     : '전체 강좌'
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* 페이지 헤더 */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold">{activeLabel}</h1>
@@ -78,7 +78,7 @@ export default async function CoursesPage({ searchParams }: PageProps) {
           {/* 강좌 그리드 */}
           {result.data.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {result.data.map((course) => (
                   <CourseCard key={course.id} course={course} />
                 ))}

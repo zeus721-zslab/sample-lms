@@ -55,7 +55,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const { course, relatedCourses } = data
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* 브레드크럼 */}
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
         <Link href="/courses" className="hover:text-foreground transition-colors">강좌</Link>

@@ -40,7 +40,7 @@ export default function FaqPage() {
   const activeGroup = groups.find((g) => g.category === activeTab)
 
   return (
-    <div className="container mx-auto px-4 py-10 max-w-3xl">
+    <div className="container mx-auto px-4 py-10 max-w-7xl">
       <h1 className="text-2xl font-bold mb-1">자주 묻는 질문</h1>
       <p className="text-muted-foreground text-sm mb-6">궁금하신 점을 빠르게 찾아보세요.</p>
 

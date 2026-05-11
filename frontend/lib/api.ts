@@ -159,6 +159,10 @@ export const courseApi = {
   detail(slug: string) {
     return request<Course>(`/courses/${slug}`)
   },
+
+  suggest(q: string) {
+    return request<string[]>(`/courses/suggest?q=${encodeURIComponent(q)}`)
+  },
 }
 
 export const enrollmentApi = {

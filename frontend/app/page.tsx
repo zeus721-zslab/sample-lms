@@ -37,7 +37,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col">
       {/* ── 히어로 ─────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-24 text-center overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center px-6 sm:px-16 py-24 text-center overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="flex items-center gap-2 mb-4 text-primary">
           <GraduationCap className="h-8 w-8" />
@@ -62,7 +62,7 @@ export default async function HomePage() {
       {/* ── 카테고리 퀵링크 ────────────────────────────── */}
       {categories.length > 0 && (
         <section className="border-y border-border/60 bg-muted/20 px-4 py-6">
-          <div className="container mx-auto max-w-5xl">
+          <div className="container mx-auto max-w-7xl">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-medium text-muted-foreground mr-1">카테고리</span>
               {categories.map((cat) => (
@@ -83,7 +83,7 @@ export default async function HomePage() {
       {/* ── 학점은행 인기 강좌 ──────────────────────────── */}
       {creditCourses.length > 0 && (
         <section className="px-4 py-14">
-          <div className="container mx-auto max-w-5xl">
+          <div className="container mx-auto max-w-7xl">
             <div className="flex items-end justify-between mb-6">
               <div>
                 <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">학점은행</p>
@@ -107,7 +107,7 @@ export default async function HomePage() {
       {/* ── 자격증 인기 강좌 ────────────────────────────── */}
       {certCourses.length > 0 && (
         <section className="px-4 py-14 bg-muted/20 border-t border-border/60">
-          <div className="container mx-auto max-w-5xl">
+          <div className="container mx-auto max-w-7xl">
             <div className="flex items-end justify-between mb-6">
               <div>
                 <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">자격증</p>
@@ -130,7 +130,7 @@ export default async function HomePage() {
 
       {/* ── 특징 ───────────────────────────────────────── */}
       <section className="border-t border-border/60 px-4 py-16">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-center text-xl font-bold mb-10">왜 zslab LMS인가</h2>
           <div className="grid gap-6 sm:grid-cols-3">
             {features.map(({ icon: Icon, title, desc }) => (

@@ -8,6 +8,8 @@ interface Props {
   lessonTitle?: string
   /** 재생 시작 위치 (초). 영상 로드 완료 후 seek. */
   startTime?: number
+  /** true이면 로드 완료 즉시 play() 시도. 브라우저 정책 차단 시 muted 후 재시도. */
+  autoPlay?: boolean
   onPlay?: () => void
   onPause?: () => void
   onEnded?: () => void
@@ -15,7 +17,7 @@ interface Props {
   onTimeTick?: (seconds: number) => void
 }
 
-export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPause, onEnded, onTimeTick }: Props) {
+export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, autoPlay = false, onPlay, onPause, onEnded, onTimeTick }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const hlsRef = useRef<import('hls.js').default | null>(null)
   const tickInterval = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -45,6 +47,14 @@ export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPa
     }, 1_000)
   }, [onTimeTick, clearTick])
 
+  /** play() 시도 → 브라우저 정책 차단 시 muted=true 후 재시도 */
+  const tryPlay = useCallback((video: HTMLVideoElement) => {
+    video.play().catch(() => {
+      video.muted = true
+      video.play().catch(() => {/* muted도 차단되면 조용히 포기 */})
+    })
+  }, [])
+
   useEffect(() => {
     const video = videoRef.current
     if (!video || !videoUrl) return
@@ -68,6 +78,7 @@ export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPa
           video.src = videoUrl
           const handleMeta = () => {
             if (startTime > 0) video.currentTime = startTime
+            if (autoPlay) tryPlay(video)
             video.removeEventListener('loadedmetadata', handleMeta)
           }
           video.addEventListener('loadedmetadata', handleMeta)
@@ -83,6 +94,7 @@ export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPa
         hls.attachMedia(video)
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           if (startTime > 0) video.currentTime = startTime
+          if (autoPlay) tryPlay(video)
         })
         hls.on(Hls.Events.ERROR, (_event, data) => {
           if (data.fatal) {
@@ -94,6 +106,7 @@ export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPa
       video.src = videoUrl
       const handleMeta = () => {
         if (startTime > 0) video.currentTime = startTime
+        if (autoPlay) tryPlay(video)
         video.removeEventListener('loadedmetadata', handleMeta)
       }
       video.addEventListener('loadedmetadata', handleMeta)
@@ -106,7 +119,7 @@ export function VideoPlayer({ videoUrl, lessonTitle, startTime = 0, onPlay, onPa
       clearHls()
       clearTick()
     }
-  }, [videoUrl, startTime, onPlay, onPause, onEnded, clearHls, clearTick, startTick])
+  }, [videoUrl, startTime, autoPlay, onPlay, onPause, onEnded, clearHls, clearTick, startTick, tryPlay])
 
   if (!videoUrl) {
     return (

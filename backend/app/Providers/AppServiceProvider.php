@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Course;
+use App\Observers\CourseObserver;
 use App\Services\Payment\PaymentGatewayInterface;
 use App\Services\Payment\StubPaymentGateway;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Course::observe(CourseObserver::class);
     }
 }

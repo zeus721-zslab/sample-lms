@@ -57,7 +57,7 @@ export default async function SemestersPage() {
   const hero = enrolling ?? active
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight mb-1">학사일정</h1>
         <p className="text-sm text-muted-foreground">학점은행제 강좌는 학기별로 개설·운영됩니다.</p>

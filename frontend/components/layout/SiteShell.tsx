@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { useForceLogoutSocket } from '@/hooks/useForceLogoutSocket'
+import { ChatWidget } from '@/components/ChatWidget'
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -21,6 +22,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <ChatWidget />
     </div>
   )
 }

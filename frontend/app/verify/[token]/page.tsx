@@ -62,7 +62,7 @@ export default function VerifyTokenPage() {
     <div className="min-h-screen bg-muted/30 dark:bg-background">
       {/* 공식 헤더 */}
       <header className="border-b border-border/60 bg-background">
-        <div className="container mx-auto max-w-3xl px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity">
             <GraduationCap className="h-5 w-5 text-primary" />
             <span className="font-semibold text-sm tracking-tight">zslab Academy</span>
@@ -71,7 +71,7 @@ export default function VerifyTokenPage() {
         </div>
       </header>
 
-      <main className="container mx-auto max-w-3xl px-4 py-10 space-y-6">
+      <main className="container mx-auto max-w-7xl px-4 py-10 space-y-6">
 
         {/* 결과 헤더 카드 */}
         <div className={`rounded-2xl border-2 p-8 text-center ${
@@ -189,7 +189,7 @@ export default function VerifyTokenPage() {
 
       {/* 공식 푸터 */}
       <footer className="border-t border-border/60 bg-background mt-10">
-        <div className="container mx-auto max-w-3xl px-4 py-4 text-center text-xs text-muted-foreground">
+        <div className="container mx-auto max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} zslab Academy. 자격증 진위확인 시스템
         </div>
       </footer>
