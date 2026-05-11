@@ -68,3 +68,8 @@ tmp/
 .cache/
 *.pem
 *.key
+.docker/
+.npm/
+.lesshst
+*.bak
+CLAUDE.md.bak
