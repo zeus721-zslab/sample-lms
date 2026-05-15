@@ -73,3 +73,6 @@ tmp/
 .lesshst
 *.bak
 CLAUDE.md.bak
+
+.copilot/
+temp-*/
