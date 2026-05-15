@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCreditAppApi, adminSemesterApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -33,7 +33,7 @@ const STATUS_TRANSITIONS: Record<CreditAppStatus, CreditAppStatus[]> = {
 }
 
 export default function CreditApplicationsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<CreditApplicationPaginated | null>(null)
   const [semesters, setSemesters] = useState<Semester[]>([])
   const [loading, setLoading] = useState(true)

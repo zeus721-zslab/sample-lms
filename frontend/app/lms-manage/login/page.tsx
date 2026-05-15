@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { GraduationCap, Loader2, AlertTriangle, ShieldCheck } from 'lucide-react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { ApiError } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -48,7 +48,7 @@ function AdminLoginForm() {
   const returnUrl = safeReturnUrl(searchParams.get('return_url'))
 
   const reason = searchParams.get('reason')
-  const { login, logout, user, isLoaded } = useAuthStore()
+  const { login, logout, user, isLoaded } = useAdminAuthStore()
 
   const [attempts, setAttempts] = useState(0)
   const [lockRemaining, setLockRemaining] = useState(0)
@@ -104,7 +104,7 @@ function AdminLoginForm() {
 
     try {
       await login(data.email, data.password)
-      const { user: loggedInUser, token } = useAuthStore.getState()
+      const { user: loggedInUser, token } = useAdminAuthStore.getState()
 
       // admin 역할 확인
       if (!loggedInUser?.roles.includes('admin')) {

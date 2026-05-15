@@ -778,8 +778,70 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 46-6: Next.js 빌드 성공 + Docker 재배포 + 전 컨테이너 healthy 확인
 
 ## STEP 47: git commit & push (2026-05-15)
-- [ ] STEP 47-1: 변경 파일 확인 및 커밋
-- [ ] STEP 47-2: git push
+- [x] STEP 47-1: 변경 파일 확인 및 커밋 (f8cd07e2)
+- [x] STEP 47-2: git push — b81f5052..f8cd07e2 main -> main
+
+## STEP 48: 자격증 PDF 수정 (2026-05-15)
+- [x] STEP 48-1: NanumGothic 폰트 등록 (storage/fonts)
+- [x] STEP 48-2: template.blade.php — NanumGothic 적용 + QR URL 텍스트 제거 + SVG 크기 CSS 수정
+- [x] STEP 48-3: CertificateIssueService — defaultFont + chroot 설정
+- [x] STEP 48-4: PDF 재생성 테스트
+- [x] STEP 48-5: 검증
+  - NanumGothic/NanumGothicBold PDF 임베드 확인 (/BaseFont /SUBAAB+NanumGothic, /SUBAAC+NanumGothicBold) ✓
+  - GET /api/my/certificates/2/download → 200, application/pdf, 50K ✓
+  - QR URL 텍스트 제거 완료 ✓
+  - 컨테이너 에러 0 ✓
+
+## STEP 49: 자격증 PDF 단일 페이지 수정 (2026-05-15)
+- [x] STEP 49-1: template.blade.php — @page 설정, flexbox→절대 위치 레이아웃으로 변경
+- [x] STEP 49-2: PDF 재생성 + 단일 페이지 확인 (/Count 1)
+- [x] STEP 49-3: API 다운로드 + 한글 유지 확인
+  - GET /api/my/certificates/2/download → 200, 55K ✓
+  - /Count 1 (단일 페이지) ✓
+  - NanumGothic + NanumGothicBold 임베드 ✓
+  - 컨테이너 에러 0 ✓
+
+## STEP 50: Sanctum 토큰 abilities 세션 분리 (2026-05-15)
+- [x] STEP 50-1: AuthController — 역할 기준 토큰 abilities 분리 발급
+- [x] STEP 50-2: RoleMiddleware — tokenCan 검증 추가
+- [x] STEP 50-3: 기존 abilities=['*'] 토큰 삭제 (2건 삭제, remaining=0)
+- [x] STEP 50-4: lms_php 재시작 + 검증 SC1~SC6
+  SC1 student 로그인 → name=student-session, abilities=["role:student"] ✓
+  SC2 admin 로그인 → name=admin-session, abilities=["role:admin"] ✓
+  SC3 student 토큰 → /api/admin/users → 403 ✓
+  SC4 admin 토큰 → /api/courses (공개) → 200 ✓
+  SC5 student 토큰 → /api/my/enrollments → 200 ✓
+  SC6 admin 토큰 → /api/my/enrollments → 200 ✓
+  컨테이너 에러 0 ✓
+
+## STEP 51: 학습자/관리자 로그인 분리 (2026-05-15)
+- [x] STEP 51-1: AuthController — login_type 파라미터 검증 추가
+- [x] STEP 51-2: lib/api.ts + store/auth.ts — login_type 전달 경로 추가
+- [x] STEP 51-3: /login/page.tsx — login_type: 'student' 전달
+- [x] STEP 51-4: /lms-manage/login/page.tsx — login_type: 'admin' 전달
+- [x] STEP 51-5: 빌드 + lms_php 재시작 + SC1~SC4 검증
+  SC1 학습자 페이지 + admin 로그인 → 422 "관리자 계정은 관리자 페이지에서 로그인하세요." ✓
+  SC2 학습자 페이지 + student 로그인 → 200, roles=['student'] ✓
+  SC3 관리자 페이지 + student 로그인 → 422 "학습자 계정은 학습자 페이지에서 로그인하세요." ✓
+  SC4 관리자 페이지 + admin 로그인 → 200, roles=['admin'] ✓
+  TypeScript OK, 빌드 성공, 컨테이너 에러 0 ✓
+
+## STEP 52: 토큰 스토리지 분리 + 에러 메시지 모호화 (2026-05-15)
+- [x] STEP 52-1: AuthController — me() token_type 추가, login() 에러 메시지 모호화
+- [x] STEP 52-2: store/adminAuth.ts 신규 생성 (lms-admin-auth 키)
+- [x] STEP 52-3: lib/api.ts LmsUser에 token_type 추가
+- [x] STEP 52-4: lms-manage 30개 페이지 + admin 컴포넌트 2개 일괄 교체
+- [x] STEP 52-5: 빌드 + 배포 + SC1~SC5 검증
+  SC1 관리자 페이지 + student 로그인 → "이메일 또는 비밀번호가 올바르지 않습니다." ✓
+  SC2 학습자 페이지 + admin 로그인 → "이메일 또는 비밀번호가 올바르지 않습니다." ✓
+  SC3 student 로그인 me() → token_type=student ✓
+  SC4 admin 로그인 me() → token_type=admin ✓
+  SC5 두 토큰 동시: student→/my/enrollments 200, admin→/admin/users 200 ✓
+  TypeScript OK, 빌드 성공, 컨테이너 에러 0 ✓
+
+## STEP 53: git commit & push (2026-05-15)
+- [ ] STEP 53-1: 변경 파일 스테이징 및 커밋
+- [ ] STEP 53-2: git push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

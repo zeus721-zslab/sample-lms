@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCertMasterApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,7 @@ import type { AdminCertificate } from '@/types/admin-certificate'
 
 export default function CertificateDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [cert, setCert] = useState<AdminCertificate | null>(null)
   const [loading, setLoading] = useState(true)
   const [courseInput, setCourseInput] = useState('')

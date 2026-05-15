@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminFaqApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { DataTable } from '@/components/admin/DataTable'
@@ -22,7 +22,7 @@ type FaqPaginated = { data: FaqItem[]; total: number; last_page: number; current
 function FaqFormDialog({ open, faq, onClose, onSaved }: {
   open: boolean; faq: FaqItem | null; onClose: () => void; onSaved: () => void
 }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [category, setCategory] = useState('')
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
@@ -93,7 +93,7 @@ function FaqFormDialog({ open, faq, onClose, onSaved }: {
 }
 
 export default function AdminFaqsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<FaqPaginated | null>(null)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

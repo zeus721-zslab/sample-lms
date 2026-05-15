@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCertVerificationApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -13,7 +13,7 @@ import { ShieldCheck } from 'lucide-react'
 import type { AdminVerificationLog, AdminVerificationLogPaginated } from '@/types/admin-certificate'
 
 export default function AdminVerificationsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<AdminVerificationLogPaginated | null>(null)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

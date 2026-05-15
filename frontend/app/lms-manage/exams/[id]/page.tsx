@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminExamApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
@@ -107,7 +107,7 @@ function QuestionCard({
 
 export default function ExamDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [exam, setExam] = useState<AdminExam | null>(null)
   const [questions, setQuestions] = useState<AdminQuestion[]>([])
   const [loading, setLoading] = useState(true)

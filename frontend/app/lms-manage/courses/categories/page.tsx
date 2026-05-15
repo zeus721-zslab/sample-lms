@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCategoryApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
@@ -60,7 +60,7 @@ function CategoryRow({
 }
 
 export default function AdminCategoriesPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [categories, setCategories] = useState<AdminCategory[]>([])
   const [loading, setLoading] = useState(true)
 

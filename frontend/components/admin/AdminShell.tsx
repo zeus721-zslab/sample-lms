@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { AdminNav } from './AdminNav'
 import { CommandPalette } from './CommandPalette'
 import { KeyboardShortcutsDialog } from './KeyboardShortcutsDialog'
@@ -92,7 +92,7 @@ function Breadcrumb() {
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const { collapsed, toggle } = useSidebarState()
   const { theme, setTheme } = useTheme()
-  const { user, logout } = useAuthStore()
+  const { user, logout } = useAdminAuthStore()
   const router = useRouter()
 
   // 관리자 채팅 소켓 연결 (전체 라이프사이클)

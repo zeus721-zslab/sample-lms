@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCourseApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { DataTable } from '@/components/admin/DataTable'
@@ -24,7 +24,7 @@ function formatDuration(sec: number) {
 export default function AdminCourseLessonsPage() {
   const { id } = useParams<{ id: string }>()
   const courseId = Number(id)
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
 
   const [course] = useState<AdminCourse | null>(null)
   const [lessons, setLessons] = useState<AdminLesson[]>([])

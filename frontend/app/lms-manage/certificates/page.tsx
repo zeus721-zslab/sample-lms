@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCertMasterApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -28,7 +28,7 @@ function CertFormDialog({
   onClose: () => void
   onSaved: () => void
 }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [form, setForm] = useState({ code: '', name: '', issuer: '', required_pass_yn: true })
   const [saving, setSaving] = useState(false)
 
@@ -100,7 +100,7 @@ function CertFormDialog({
 }
 
 export default function AdminCertificatesPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [data, setData] = useState<AdminCertificatePaginated | null>(null)
   const [loading, setLoading] = useState(true)

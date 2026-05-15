@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminGradingApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -25,7 +25,7 @@ const GRADED_OPTIONS = [
 ]
 
 function ExamGradingTab() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [data, setData] = useState<GradingExamPaginated | null>(null)
   const [loading, setLoading] = useState(true)
@@ -125,7 +125,7 @@ function ExamGradingTab() {
 }
 
 function AssignmentGradingTab() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const searchParams = useSearchParams()
   const initAssignmentId = searchParams.get('assignment_id')

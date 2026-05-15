@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminRecordApi, adminSemesterApi, adminOfferingApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { DataTable } from '@/components/admin/DataTable'
@@ -36,7 +36,7 @@ const emptyScoreForm = () => ({
 })
 
 export default function GradesPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<AcademicRecordPaginated | null>(null)
   const [semesters, setSemesters] = useState<Semester[]>([])
   const [offerings, setOfferings] = useState<Offering[]>([])

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminSemesterApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -30,7 +30,7 @@ const STATUS_BTN: Record<string, { label: string; destructive?: boolean }> = {
 }
 
 export default function SemesterDetailPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const params = useParams()
   const router = useRouter()
   const id = Number(params.id)

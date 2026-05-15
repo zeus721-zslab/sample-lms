@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminSystemApi, adminUserApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { DataTable } from '@/components/admin/DataTable'
@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 import type { SessionPolicy, AdminUser } from '@/types/admin'
 
 export default function ConnectionsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [policy, setPolicy] = useState<SessionPolicy | null>(null)
   const [loading, setLoading] = useState(true)
   const [toggling, setToggling] = useState(false)

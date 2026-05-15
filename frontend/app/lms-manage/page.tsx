@@ -9,7 +9,7 @@ import {
   LineChart, Line, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminStatsApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatCard } from '@/components/admin/StatCard'
@@ -43,7 +43,7 @@ function LoadingRow() {
 }
 
 export default function AdminDashboard() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [summary, setSummary] = useState<StatsSummary | null>(null)
   const [enrollTrend, setEnrollTrend] = useState<EnrollmentTrend[]>([])
   const [revenueTrend, setRevenueTrend] = useState<RevenueTrend[]>([])

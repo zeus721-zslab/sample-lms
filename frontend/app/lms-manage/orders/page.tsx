@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminOrderApi, ApiError } from '@/lib/api'
 import type { AdminOrder } from '@/types/order'
 
@@ -28,7 +28,7 @@ const STATUS_OPTIONS = [
 ]
 
 export default function AdminOrdersPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [orders, setOrders] = useState<AdminOrder[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCourseApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -34,7 +34,7 @@ function emptyLessonForm(lessons: AdminLesson[]) {
 export default function AdminCourseDetailPage() {
   const { id } = useParams<{ id: string }>()
   const courseId = Number(id)
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
 
   const [course, setCourse] = useState<CourseWithLessons | null>(null)

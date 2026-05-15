@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminEnrollmentApi, adminSemesterApi, adminOfferingApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -26,7 +26,7 @@ const ENROLLMENT_STATUS_OPTIONS = [
 ]
 
 export default function EnrollmentsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<CbEnrollmentPaginated | null>(null)
   const [semesters, setSemesters] = useState<Semester[]>([])
   const [offerings, setOfferings] = useState<Offering[]>([])

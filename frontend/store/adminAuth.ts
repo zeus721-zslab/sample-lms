@@ -4,26 +4,23 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { authApi, type LmsUser } from '@/lib/api'
 
-interface AuthState {
+interface AdminAuthState {
   user: LmsUser | null
   token: string | null
   isLoaded: boolean
-  login: (email: string, password: string, loginType?: 'student' | 'admin') => Promise<void>
+  login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   me: () => Promise<void>
   setAuth: (user: LmsUser, token: string) => void
   clearAuth: () => void
 }
 
-// zustand v5: toThenable makes localStorage hydration synchronous inside create().
-// useAuthStore is undefined when onRehydrateStorage callback fires, so we capture
-// the internal set function here before hydrate() runs (config() is called first).
-let _markLoaded: (() => void) | null = null
+let _markAdminLoaded: (() => void) | null = null
 
-export const useAuthStore = create<AuthState>()(
+export const useAdminAuthStore = create<AdminAuthState>()(
   persist(
     (set, get) => {
-      _markLoaded = () => set({ isLoaded: true })
+      _markAdminLoaded = () => set({ isLoaded: true })
       return {
         user: null,
         token: null,
@@ -33,8 +30,8 @@ export const useAuthStore = create<AuthState>()(
 
         clearAuth: () => set({ user: null, token: null, isLoaded: true }),
 
-        login: async (email, password, loginType?) => {
-          const { token, user } = await authApi.login({ email, password, login_type: loginType })
+        login: async (email, password) => {
+          const { token, user } = await authApi.login({ email, password, login_type: 'admin' })
           set({ user, token, isLoaded: true })
         },
 
@@ -55,10 +52,10 @@ export const useAuthStore = create<AuthState>()(
       }
     },
     {
-      name: 'lms-auth',
+      name: 'lms-admin-auth',
       partialize: (state) => ({ user: state.user, token: state.token }),
       onRehydrateStorage: () => () => {
-        _markLoaded?.()
+        _markAdminLoaded?.()
       },
     },
   ),

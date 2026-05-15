@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminAssignmentApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -36,7 +36,7 @@ function AssignmentFormDialog({
   onClose: () => void
   onSaved: () => void
 }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [form, setForm] = useState({ course_id: '', title: '', description: '', due_at: '', max_score: '100', status: 'draft' })
   const [saving, setSaving] = useState(false)
 
@@ -135,7 +135,7 @@ function AssignmentFormDialog({
 }
 
 export default function AdminAssignmentsPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [data, setData] = useState<AdminAssignmentPaginated | null>(null)
   const [loading, setLoading] = useState(true)

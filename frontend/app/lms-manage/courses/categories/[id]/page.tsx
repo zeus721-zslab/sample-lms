@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCategoryApi, adminCourseApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -18,7 +18,7 @@ import type { AdminCategory, AdminCourse } from '@/types/admin'
 export default function AdminCategoryDetailPage() {
   const { id } = useParams<{ id: string }>()
   const catId = Number(id)
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
 
   const [category, setCategory] = useState<AdminCategory | null>(null)

@@ -42,7 +42,7 @@ class AuthController extends Controller
         }
 
         $user->load('roles');
-        $token = $user->createToken('api')->plainTextToken;
+        $token = $user->createToken('student-session', ['role:student'])->plainTextToken;
 
         return response()->json([
             'token' => $token,
@@ -53,8 +53,9 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string',
+            'email'      => 'required|email',
+            'password'   => 'required|string',
+            'login_type' => 'nullable|in:student,admin',
         ]);
 
         if (!Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
@@ -69,11 +70,27 @@ class AuthController extends Controller
             return response()->json(['message' => '비활성화된 계정입니다.'], 403);
         }
 
+        $user->load('roles');
+        $roleCodes = $user->roles->pluck('code')->toArray();
+        $isAdmin   = count(array_intersect($roleCodes, ['admin', 'professor', 'tutor'])) > 0;
+
+        // 로그인 페이지 유형 검증 (에러 메시지는 역할 노출 방지를 위해 모호하게 처리)
+        $loginType = $data['login_type'] ?? null;
+        if ($loginType === 'student' && $isAdmin) {
+            Auth::logout();
+            return response()->json(['message' => '이메일 또는 비밀번호가 올바르지 않습니다.'], 422);
+        }
+        if ($loginType === 'admin' && !$isAdmin) {
+            Auth::logout();
+            return response()->json(['message' => '이메일 또는 비밀번호가 올바르지 않습니다.'], 422);
+        }
+
         // 단일 세션 강제 — 기존 토큰 삭제 (정책·사용자 설정에 따라)
         $this->sessionControl->enforceIfNeeded($user);
 
-        $user->load('roles');
-        $token = $user->createToken('api')->plainTextToken;
+        $tokenName = $isAdmin ? 'admin-session' : 'student-session';
+        $ability   = $isAdmin ? 'role:admin'    : 'role:student';
+        $token     = $user->createToken($tokenName, [$ability])->plainTextToken;
 
         return response()->json([
             'token' => $token,
@@ -90,9 +107,13 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load('roles');
+        $user      = $request->user()->load('roles');
+        $tokenType = $request->user()->tokenCan('role:admin') ? 'admin' : 'student';
 
-        return response()->json(['user' => $this->userResource($user)]);
+        return response()->json([
+            'user'       => $this->userResource($user),
+            'token_type' => $tokenType,
+        ]);
     }
 
     private function userResource(User $user): array

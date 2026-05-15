@@ -65,7 +65,7 @@ function LoginForm() {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await login(data.email, data.password)
+      await login(data.email, data.password, 'student')
       const { user: loggedInUser } = useAuthStore.getState()
       const dest = returnUrl ?? defaultRedirectForUser(loggedInUser?.roles ?? [])
       toast.success('로그인되었습니다.')

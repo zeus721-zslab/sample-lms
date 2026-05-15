@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminNoticeApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -26,7 +26,7 @@ function NoticeFormDialog({ open, notice, onClose, onSaved }: {
   onClose: () => void
   onSaved: () => void
 }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [category, setCategory] = useState('general')
@@ -92,7 +92,7 @@ function NoticeFormDialog({ open, notice, onClose, onSaved }: {
 }
 
 export default function AdminNoticesPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<NoticePaginated | null>(null)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

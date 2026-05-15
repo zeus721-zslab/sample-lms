@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { useAdminChatStore } from '@/store/adminChat'
 import { adminInquiryApi } from '@/lib/api'
 import { Button } from '@/components/ui/button'
@@ -212,7 +212,7 @@ function RoomListPanel({ onSelect }: { onSelect: (id: number, name: string | nul
 
 // ── 소켓 연결 훅 (AdminShell 전용) ───────────────────────────────────────────
 export function useAdminChatConnection() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const { setSocket, setConnected, setChatToken, setRooms, receiveMessage, setMessages } = useAdminChatStore()
   const socketRef = useRef<ReturnType<typeof import('socket.io-client')['io']> | null>(null)
   const seenMsgIds = useRef<Set<number>>(new Set())

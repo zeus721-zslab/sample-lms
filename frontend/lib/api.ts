@@ -100,6 +100,7 @@ export type LmsUser = {
   gender: 'male' | 'female' | 'other' | null
   status: 'active' | 'suspended' | 'withdrawn'
   roles: string[]
+  token_type?: 'admin' | 'student'
 }
 
 export const authApi = {
@@ -118,7 +119,7 @@ export const authApi = {
     })
   },
 
-  login(data: { email: string; password: string }) {
+  login(data: { email: string; password: string; login_type?: 'student' | 'admin' }) {
     return request<{ token: string; user: LmsUser }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -133,7 +134,7 @@ export const authApi = {
   },
 
   me(token: string) {
-    return request<{ user: LmsUser }>('/auth/me', {
+    return request<{ user: LmsUser; token_type: 'admin' | 'student' }>('/auth/me', {
       headers: { Authorization: `Bearer ${token}` },
     })
   },

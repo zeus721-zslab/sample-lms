@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminUserApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -28,7 +28,7 @@ const STATUS_OPTIONS = [
 ]
 
 export default function AdminUsersPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [data, setData] = useState<AdminUserPaginated | null>(null)
   const [loading, setLoading] = useState(true)

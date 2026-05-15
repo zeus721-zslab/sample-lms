@@ -98,7 +98,10 @@ class CertificateIssueService
         $pdf->setOptions([
             'isHtml5ParserEnabled' => true,
             'isRemoteEnabled'      => false,
-            'defaultFont'          => 'DejaVu Sans',
+            'defaultFont'          => 'NanumGothic',
+            'fontDir'              => storage_path('fonts'),
+            'fontCache'            => storage_path('fonts'),
+            'chroot'               => [storage_path('fonts'), base_path()],
         ]);
 
         $relativePath = 'certificates/' . $issue->serial_no . '.pdf';

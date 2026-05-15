@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminSemesterApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { DataTable } from '@/components/admin/DataTable'
@@ -50,7 +50,7 @@ const emptyForm = () => ({
 })
 
 export default function SemestersPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [semesters, setSemesters] = useState<Semester[]>([])
   const [loading, setLoading] = useState(true)

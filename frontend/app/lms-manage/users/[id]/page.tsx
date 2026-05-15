@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminUserApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -26,7 +26,7 @@ function formatDate(s: string) {
 export default function AdminUserDetailPage() {
   const { id } = useParams<{ id: string }>()
   const userId = Number(id)
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
 
   const [user, setUser] = useState<AdminUser | null>(null)

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminGradingApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -20,7 +20,7 @@ const Q_TYPE_LABELS: Record<string, string> = { single: '단일선택', multiple
 
 export default function ExamGradingDetailPage() {
   const { submissionId } = useParams<{ submissionId: string }>()
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [detail, setDetail] = useState<GradingExamDetail | null>(null)
   const [loading, setLoading] = useState(true)

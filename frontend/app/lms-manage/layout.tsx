@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { AdminShell } from '@/components/admin/AdminShell'
 
 const IDLE_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2시간
@@ -30,7 +30,7 @@ function NotFoundScreen() {
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, token, isLoaded, logout } = useAuthStore()
+  const { user, token, isLoaded, logout } = useAdminAuthStore()
   const router = useRouter()
   const pathname = usePathname()
   const lastActivityRef = useRef(0)

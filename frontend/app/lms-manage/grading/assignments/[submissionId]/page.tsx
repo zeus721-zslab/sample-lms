@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminGradingApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,7 @@ import type { GradingAssignmentSubmission } from '@/types/admin-assessment'
 
 export default function AssignmentGradingDetailPage() {
   const { submissionId } = useParams<{ submissionId: string }>()
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const router = useRouter()
   const [detail, setDetail] = useState<GradingAssignmentSubmission | null>(null)
   const [loading, setLoading] = useState(true)

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 import { adminCertIssueApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { FilterBar } from '@/components/admin/FilterBar'
@@ -22,7 +22,7 @@ const STATUS_OPTIONS = [
 ]
 
 function ManualIssueDialog({ open, onClose, onSaved }: { open: boolean; onClose: () => void; onSaved: () => void }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [form, setForm] = useState({ user_id: '', certificate_id: '', enrollment_id: '' })
   const [saving, setSaving] = useState(false)
 
@@ -81,7 +81,7 @@ function ManualIssueDialog({ open, onClose, onSaved }: { open: boolean; onClose:
 }
 
 function RevokeDialog({ issue, onClose, onSaved }: { issue: AdminCertificateIssue | null; onClose: () => void; onSaved: () => void }) {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [reason, setReason] = useState('')
   const [revoking, setRevoking] = useState(false)
 
@@ -129,7 +129,7 @@ function RevokeDialog({ issue, onClose, onSaved }: { issue: AdminCertificateIssu
 }
 
 export default function AdminCertificateIssuesPage() {
-  const { token } = useAuthStore()
+  const { token } = useAdminAuthStore()
   const [data, setData] = useState<AdminCertificateIssuePaginated | null>(null)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
