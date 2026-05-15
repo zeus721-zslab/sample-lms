@@ -886,5 +886,11 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 59-1: ci.yml Upload coverage 스텝 제거 + --coverage-clover 옵션 제거
 - [x] STEP 59-2: git commit (6b341acd) & push → c1fd9bb7..6b341acd main -> main
 
+## STEP 61: 단일 세션 루프 버그 수정 (2026-05-15)
+- [x] STEP 61-1: (A) UserSeeder — admin/professor/tutor allow_concurrent_session=true 명시 + 기존 레코드 update
+- [x] STEP 61-2: (B) AdminUserController — STAFF_ROLES 상수 + store()/syncRoles() 자동 설정
+- [x] STEP 61-3: (B) AuthController::register() — 동일 패턴 적용 (student는 항상 false)
+- [x] STEP 61-4: php artisan test — 30/31 통과 ✓ (ExampleTest GET / → 500 는 변경 전부터 로컬 환경 사전 실패, 핵심 30개 전부 통과)
+
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

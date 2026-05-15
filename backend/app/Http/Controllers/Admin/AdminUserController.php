@@ -12,6 +12,8 @@ use Illuminate\Validation\Rule;
 
 class AdminUserController extends Controller
 {
+    private const STAFF_ROLES = ['admin', 'professor', 'tutor'];
+
     /**
      * GET /api/admin/users
      * 필터: role, status, q | 페이지네이션 20
@@ -67,6 +69,9 @@ class AdminUserController extends Controller
         if (!empty($data['roles'])) {
             $roleIds = Role::whereIn('code', $data['roles'])->pluck('id');
             $user->roles()->sync($roleIds);
+            $user->update([
+                'allow_concurrent_session' => !empty(array_intersect($data['roles'], self::STAFF_ROLES)),
+            ]);
         }
 
         return response()->json($user->load('roles:id,code,name'), 201);
@@ -123,6 +128,9 @@ class AdminUserController extends Controller
 
         $roleIds = Role::whereIn('code', $data['roles'])->pluck('id');
         $user->roles()->sync($roleIds);
+        $user->update([
+            'allow_concurrent_session' => !empty(array_intersect($data['roles'], self::STAFF_ROLES)),
+        ]);
 
         return response()->json([
             'message' => '역할이 업데이트되었습니다.',

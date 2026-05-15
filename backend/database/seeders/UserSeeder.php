@@ -11,6 +11,8 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        $staffRoles = ['admin', 'professor', 'tutor'];
+
         $accounts = [
             ['email' => 'admin@zslab.test',     'name' => '관리자',   'role' => 'admin'],
             ['email' => 'professor@zslab.test',  'name' => '교수',     'role' => 'professor'],
@@ -19,14 +21,21 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($accounts as $account) {
+            $isStaff = in_array($account['role'], $staffRoles);
+
             $user = User::firstOrCreate(
                 ['email' => $account['email']],
                 [
-                    'name'     => $account['name'],
-                    'password' => Hash::make('password'),
-                    'status'   => 'active',
+                    'name'                     => $account['name'],
+                    'password'                 => Hash::make('password'),
+                    'status'                   => 'active',
+                    'allow_concurrent_session' => $isStaff,
                 ]
             );
+
+            if (!$user->wasRecentlyCreated) {
+                $user->update(['allow_concurrent_session' => $isStaff]);
+            }
 
             $role = Role::where('code', $account['role'])->first();
             if ($role && !$user->roles->contains($role->id)) {

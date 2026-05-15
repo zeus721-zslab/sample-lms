@@ -26,17 +26,21 @@ class AuthController extends Controller
             'gender'     => 'nullable|in:male,female,other',
         ]);
 
+        $staffRoles = ['admin', 'professor', 'tutor'];
+        $assignedRole = 'student';
+
         $user = User::create([
-            'name'       => $data['name'],
-            'email'      => $data['email'],
-            'password'   => $data['password'],
-            'phone'      => $data['phone'] ?? null,
-            'birth_date' => $data['birth_date'] ?? null,
-            'gender'     => $data['gender'] ?? null,
-            'status'     => 'active',
+            'name'                     => $data['name'],
+            'email'                    => $data['email'],
+            'password'                 => $data['password'],
+            'phone'                    => $data['phone'] ?? null,
+            'birth_date'               => $data['birth_date'] ?? null,
+            'gender'                   => $data['gender'] ?? null,
+            'status'                   => 'active',
+            'allow_concurrent_session' => in_array($assignedRole, $staffRoles),
         ]);
 
-        $studentRole = Role::where('code', 'student')->first();
+        $studentRole = Role::where('code', $assignedRole)->first();
         if ($studentRole) {
             $user->roles()->attach($studentRole->id);
         }
