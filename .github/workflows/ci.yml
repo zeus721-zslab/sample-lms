@@ -75,13 +75,7 @@ jobs:
         working-directory: backend
         env:
           ELASTICSEARCH_ENABLED: "false"
-        run: php artisan test --testsuite=Feature --coverage-clover=coverage.xml
-
-      - name: Upload coverage
-        uses: actions/upload-artifact@v5
-        with:
-          name: backend-coverage
-          path: backend/coverage.xml
+        run: php artisan test --testsuite=Feature
 
   # ── Next.js 프론트엔드 빌드·타입 검사 ─────────
   frontend:

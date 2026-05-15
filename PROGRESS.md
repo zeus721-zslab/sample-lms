@@ -878,9 +878,9 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 57-3: git commit (a80629cd) & push → 90545694..a80629cd main -> main
 
 ## STEP 58: CI 경고 2종 수정 (2026-05-15)
-- [ ] STEP 58-1: ci.yml + deploy.yml FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 추가
-- [ ] STEP 58-2: useForceLogoutSocket.ts deps 배열에 user 추가
-- [ ] STEP 58-3: git commit & push
+- [x] STEP 58-1: ci.yml + deploy.yml 워크플로우 레벨 env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 추가
+- [x] STEP 58-2: useForceLogoutSocket.ts deps [token, user?.id] → [token, user] (ESLint 경고 0 확인)
+- [x] STEP 58-3: git commit (c1fd9bb7) & push → a80629cd..c1fd9bb7 main -> main
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
