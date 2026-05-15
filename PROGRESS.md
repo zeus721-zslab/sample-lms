@@ -840,8 +840,27 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
   TypeScript OK, 빌드 성공, 컨테이너 에러 0 ✓
 
 ## STEP 53: git commit & push (2026-05-15)
-- [ ] STEP 53-1: 변경 파일 스테이징 및 커밋
-- [ ] STEP 53-2: git push
+- [x] STEP 53-1: 변경 파일 스테이징 및 커밋 (eae3d664, 53 files)
+- [x] STEP 53-2: git push — f8cd07e2..eae3d664 main -> main
+
+## STEP 54: PHPUnit 테스트 구조 설계 + 핵심 테스트 작성 (2026-05-15)
+- [x] STEP 54-1: 기반 구조 — 디렉토리 + BaseTestCase + 헬퍼
+- [x] STEP 54-2: Factory 정비 (UserFactory 상태 + CourseFactory + EnrollmentFactory + ExamFactory)
+- [x] STEP 54-3: Feature 테스트 작성 (Auth / Enrollment / Certificate)
+- [x] STEP 54-4: phpunit.xml 정비 (testsuite + SQLite + DB_URL 빈값 + ELASTICSEARCH_ENABLED=false)
+- [x] STEP 54-5: GitHub Actions ci.yml에 Feature testsuite 실행 추가 (pdo_sqlite extension 포함)
+- [x] STEP 54-6: php artisan test --testsuite=Feature → 19 passed, 0 failed ✓
+  - AuthTest: 7개 (학습자/관리자 로그인, 역할 검증, 잘못된 비밀번호, me, logout)
+  - EnrollmentTest: 5개 (자격증 코스 수강신청, 중복, 미인증, 미공개, 목록)
+  - CertificateTest: 6개 (미완료/미합격 발급 거부, 합격 후 발급, 진위확인 valid/invalid, 인증 필요)
+  - ExampleTest: 1개
+
+## STEP 55: Exam/Assignment 테스트 추가 + git push (2026-05-15)
+- [ ] STEP 55-1: tests/Feature/Exam/ExamTest.php 작성
+- [ ] STEP 55-2: tests/Feature/Exam/AssignmentTest.php 작성
+- [ ] STEP 55-3: Factory 보완 (AssignmentFactory, ExamSubmission HasFactory)
+- [ ] STEP 55-4: php artisan test --testsuite=Feature 전체 통과 확인
+- [ ] STEP 55-5: git commit & push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
