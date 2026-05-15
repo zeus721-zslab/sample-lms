@@ -17,7 +17,6 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { useAuthStore } from '@/store/auth'
 import { certificateApi, enrollmentApi, ApiError } from '@/lib/api'
 import type { CertificateIssue } from '@/types/certificate'
@@ -31,12 +30,6 @@ function calcDday(dateStr: string | null): string {
   return days <= 30 ? `D-${days}` : ''
 }
 
-function maskName(name: string): string {
-  if (name.length <= 1) return name
-  if (name.length === 2) return name[0] + '*'
-  return name[0] + '*'.repeat(name.length - 2) + name[name.length - 1]
-}
-
 const STATUS_CONFIG = {
   active:  { label: '유효',   icon: CheckCircle2,    cls: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
   revoked: { label: '취소됨', icon: XCircle,         cls: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
@@ -45,7 +38,7 @@ const STATUS_CONFIG = {
 
 export default function MyCertificatesPage() {
   const router = useRouter()
-  const { token, user, isLoaded } = useAuthStore()
+  const { token, isLoaded } = useAuthStore()
 
   const [certificates, setCertificates] = useState<CertificateIssue[]>([])
   const [issuableEnrollments, setIssuableEnrollments] = useState<Enrollment[]>([])
@@ -61,8 +54,6 @@ export default function MyCertificatesPage() {
       ])
       setCertificates(certs)
       // completed 상태이고 자격증 코스인데 아직 미발급인 enrollment 필터
-      const issuedEnrollmentIds = new Set<number>() // 이미 발급된 enrollment는 API가 반환하지 않으므로 코스 기준으로 판단
-      const issuedCertCodes = new Set(certs.map((c) => c.certificate_code))
       const issuable = enrollments.filter(
         (e) =>
           e.status === 'completed' &&

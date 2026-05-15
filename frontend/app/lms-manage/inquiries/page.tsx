@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Send, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { ChatMessage } from '@/hooks/useChat'
+
 import type { InquiryRoom } from '@/lib/api'
 
 function ChatPanel({ roomId }: { roomId: number }) {
-  const { socket, messages, setMessages, markRoomRead } = useAdminChatStore()
+  const { socket, messages, markRoomRead } = useAdminChatStore()
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const msgs = messages[roomId] ?? []

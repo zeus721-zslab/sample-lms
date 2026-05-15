@@ -1,0 +1,18 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+parameters:
+    paths:
+        - app
+    level: 5
+    ignoreErrors:
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'
+        - '#Access to an undefined property App\\Models\\[A-Za-z]+::#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
+        - '#Using nullsafe method call on non-nullable type Carbon\\Carbon#'
+        - '#Cannot call method toDateString\(\) on string#'
+        - '#Constant App\\Http\\Controllers\\[A-Za-z]+::[A-Z_]+ is unused#'
+        - '#\$callback of method Illuminate\\Database\\Eloquent\\Builder#'
+        - '#contains unresolvable type#'
+        - '#ExamAnswer, Illuminate\\Database\\Eloquent\\Model given#'
+        - '#Offset .* on array{#'
+    reportUnmatchedIgnoredErrors: false

@@ -66,7 +66,7 @@ function ChatRoomPanel({
   onBack: () => void
 }) {
   const router = useRouter()
-  const { socket, messages, setMessages, markRoomRead } = useAdminChatStore()
+  const { socket, messages, markRoomRead } = useAdminChatStore()
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const msgs = messages[roomId] ?? []
@@ -290,7 +290,7 @@ export function useAdminChatConnection() {
       setSocket(null)
       setConnected(false)
     }
-  }, [token])
+  }, [token, setChatToken, setConnected, setMessages, setRooms, receiveMessage, setSocket])
 }
 
 // ── B 위젯 (우측 하단 플로팅) ────────────────────────────────────────────────

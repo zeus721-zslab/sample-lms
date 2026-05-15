@@ -44,7 +44,7 @@ export function EnrollButton({ courseId, courseType, price, courseTitle }: Props
         setExisting(found ?? null)
       }).catch(() => setExisting(null))
     } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setExisting(null)
     }
 

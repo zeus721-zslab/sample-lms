@@ -97,7 +97,7 @@ export default function AdminFaqsPage() {
   const [data, setData] = useState<FaqPaginated | null>(null)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [page, setPage] = useState(1)
+  const [page] = useState(1)
   const [formOpen, setFormOpen] = useState(false)
   const [editFaq, setEditFaq] = useState<FaqItem | null>(null)
   const [deleteFaq, setDeleteFaq] = useState<FaqItem | null>(null)

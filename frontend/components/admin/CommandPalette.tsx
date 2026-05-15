@@ -42,7 +42,7 @@ export function CommandPalette({ open, onClose }: Props) {
       )
     : COMMANDS
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+   
   useEffect(() => {
     if (open) {
       setQuery('')

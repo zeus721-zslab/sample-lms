@@ -48,7 +48,7 @@ class CertificateIssue extends Model
     public static function generateSerialNo(): string
     {
         $year = now()->format('Y');
-        $seq  = str_pad(static::whereYear('issued_at', $year)->count() + 1, 6, '0', STR_PAD_LEFT);
+        $seq  = str_pad((string)(static::whereYear('issued_at', $year)->count() + 1), 6, '0', STR_PAD_LEFT);
         return "ZSLAB-{$year}-{$seq}";
     }
 

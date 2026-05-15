@@ -1,5 +1,5 @@
 import type { Category, Course, CoursePaginated, CourseListParams } from '@/types/course'
-import type { AdminUser, AdminUserPaginated, AdminCategory, AdminCourse, AdminCoursePaginated, AdminLesson, AdminEnrollment } from '@/types/admin'
+import type { AdminUser, AdminUserPaginated, AdminCategory, AdminCourse, AdminCoursePaginated, AdminLesson } from '@/types/admin'
 import type { Semester, Offering, OfferingPaginated, CbEnrollment, CbEnrollmentPaginated, AcademicRecord, AcademicRecordPaginated, CreditApplication, CreditApplicationPaginated, CreditAppStatus } from '@/types/credit-bank'
 import type { Enrollment, EnrollmentDetail, Progress } from '@/types/enrollment'
 import type { SemesterOfferingsResponse } from '@/types/semester'

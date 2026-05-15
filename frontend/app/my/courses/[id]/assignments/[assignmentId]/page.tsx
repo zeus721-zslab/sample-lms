@@ -89,7 +89,7 @@ export default function AssignmentPage() {
 
   if (!data) return null
 
-  const { assignment, can_submit, submission } = data
+  const { assignment, submission } = data
   const dday = calcDday(assignment.due_at)
   const isPastDue = dday === '마감'
   const isGraded = !!submission?.graded_at

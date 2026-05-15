@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -41,6 +42,9 @@ class BeaconAuthMiddleware
         }
 
         $user = $tokenModel->tokenable;
+        if (!$user instanceof User) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
 
         // 3. role:student or admin 확인
         $roles = $user->roles()->pluck('code')->toArray();

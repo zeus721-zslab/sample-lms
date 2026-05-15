@@ -95,9 +95,11 @@ class CertificateIssueService
         ]);
 
         $pdf->setPaper('A4', 'portrait');
-        $pdf->set_option('isHtml5ParserEnabled', true);
-        $pdf->set_option('isRemoteEnabled', false);
-        $pdf->set_option('defaultFont', 'DejaVu Sans');
+        $pdf->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled'      => false,
+            'defaultFont'          => 'DejaVu Sans',
+        ]);
 
         $relativePath = 'certificates/' . $issue->serial_no . '.pdf';
         Storage::put($relativePath, $pdf->output());
@@ -147,7 +149,7 @@ class CertificateIssueService
             'certificate_name' => $issue->certificate->name,
             'issuer'           => $issue->certificate->issuer,
             'recipient_name'   => $issue->user->name,
-            'issued_at'        => $issue->issued_at?->toDateString(),
+            'issued_at'        => $issue->issued_at->toDateString(),
             'expires_at'       => $issue->expires_at?->toDateString(),
             'status'           => $issue->status,
         ];

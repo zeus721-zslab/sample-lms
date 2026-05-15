@@ -20,7 +20,6 @@ function ChatPanel({
   const { messages, connected, sendMessage, markRead } = useChat(chatToken, roomId)
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
-  const { user } = useAuthStore()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -100,9 +99,6 @@ export function ChatWidget() {
   const [chatToken, setChatToken] = useState<string | null>(null)
   const [roomId, setRoomId] = useState<number | null>(null)
   const [initializing, setInitializing] = useState(false)
-
-  // 로그인한 학습자만 노출
-  const isStudent = user?.roles?.includes('수강생') || user?.roles?.some(r => ['student'].includes(r))
 
   useEffect(() => {
     const handler = () => setOpen(true)

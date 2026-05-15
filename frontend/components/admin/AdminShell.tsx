@@ -38,7 +38,7 @@ function useSidebarState() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(SIDEBAR_KEY)
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       if (stored !== null) setCollapsed(stored === 'true')
     } catch {}
   }, [])

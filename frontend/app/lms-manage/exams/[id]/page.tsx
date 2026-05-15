@@ -1,18 +1,17 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useAuthStore } from '@/store/auth'
 import { adminExamApi } from '@/lib/api'
 import { PageHeader } from '@/components/admin/PageHeader'
-import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 import { Plus, Trash2, Save } from 'lucide-react'
@@ -108,7 +107,6 @@ function QuestionCard({
 
 export default function ExamDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const router = useRouter()
   const { token } = useAuthStore()
   const [exam, setExam] = useState<AdminExam | null>(null)
   const [questions, setQuestions] = useState<AdminQuestion[]>([])

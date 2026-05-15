@@ -26,7 +26,7 @@ export default function AdminCourseLessonsPage() {
   const courseId = Number(id)
   const { token } = useAuthStore()
 
-  const [course, setCourse] = useState<AdminCourse | null>(null)
+  const [course] = useState<AdminCourse | null>(null)
   const [lessons, setLessons] = useState<AdminLesson[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -40,7 +40,7 @@ export default function AdminCourseLessonsPage() {
   const [saving, setSaving] = useState(false)
 
   const [deleteTarget, setDeleteTarget] = useState<AdminLesson | null>(null)
-  const [deleting, setDeleting] = useState(false)
+  const [deleting] = useState(false)
 
   const load = useCallback(async () => {
     if (!token || !courseId) return

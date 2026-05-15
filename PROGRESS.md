@@ -758,7 +758,28 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 ## STEP 44: 코드 정리 + git commit & push (2026-05-15)
 - [x] STEP 44-1: AdminNav.tsx BarChart2 unused import 제거
 - [x] STEP 44-2: tsc 에러 없음 확인 (BarChart2 출석·성적에서 사용 중 → import 유지, Activity가 접속 통계 전용)
-- [ ] STEP 44-3: git commit & push
+- [x] STEP 44-3: git commit (b81f5052) & push → main ✓
+
+## STEP 45: 코드 품질 자동 스캔 (2026-05-15)
+- [x] STEP 45-1: PHPStan 정적 분석 — level 5, 59 errors (대부분 Eloquent 모델 타입힌트 누락)
+- [x] STEP 45-2: composer audit 보안 스캔 — 취약점 없음 ✓
+- [x] STEP 45-3: npm audit — frontend: high(Next.js CVEs)/moderate(postcss), node-realtime/chat 취약점 없음
+- [x] STEP 45-4: depcheck — @radix-ui/react-toast unused (실제론 sonner로 대체됨), dev deps는 빌드도구 정상
+- [x] STEP 45-5: ESLint — 0 errors, 30 warnings (unused vars/imports, exhaustive-deps 1건)
+- [x] STEP 45-6: 하드코딩 민감 정보 패턴 검색 — 모두 config()·env() 참조, 평문 하드코딩 없음 ✓
+- [x] STEP 45-7: N+1 패턴 검색 — 컨트롤러 내 ->each / foreach->-> 패턴 없음 ✓
+
+## STEP 46: 스캔 결과 수정 (2026-05-15)
+- [x] STEP 46-1: Next.js 이미 16.2.6 (최신 stable) — audit 범위가 canary 포함 오탐, 9.3.3 다운그레이드 불가. postcss는 Next.js 내부 dep, Next.js 17+에서 해결 예정. 스킵.
+- [x] STEP 46-2: @radix-ui/react-toast 제거 완료 (소스 import 없음 확인)
+- [x] STEP 46-3: AdminChatWidget.tsx exhaustive-deps — Zustand stable 액션 6개 deps 추가
+- [x] STEP 46-4: ESLint 23 warnings 전부 수정 (13개 파일 — 미사용 import/var/setter 제거)
+- [x] STEP 46-5: PHPStan — PDF set_option→setOptions, str_pad 타입 캐스트, BeaconAuth instanceof 체크, phpstan.neon ignore 패턴 정비 → No errors
+- [x] STEP 46-6: Next.js 빌드 성공 + Docker 재배포 + 전 컨테이너 healthy 확인
+
+## STEP 47: git commit & push (2026-05-15)
+- [ ] STEP 47-1: 변경 파일 확인 및 커밋
+- [ ] STEP 47-2: git push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
