@@ -79,6 +79,7 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://zslab-lms.duckdns.org/api}
         NEXT_PUBLIC_SOCKET_URL: ${NEXT_PUBLIC_SOCKET_URL:-wss://zslab-lms.duckdns.org/ws}
         NEXT_PUBLIC_CHAT_URL: ${NEXT_PUBLIC_CHAT_URL:-https://zslab-lms.duckdns.org}
+        NEXT_PUBLIC_APP_ENV: ${NEXT_PUBLIC_APP_ENV:-}
     image: lms_frontend:latest
     container_name: lms_frontend
     restart: unless-stopped
