@@ -55,6 +55,12 @@ const NAV_GROUPS: NavGroup[] = [
     single: true,
   },
   {
+    label: '접속 통계',
+    icon: Activity,
+    href: '/lms-manage/analytics',
+    single: true,
+  },
+  {
     label: '회원',
     icon: Users,
     items: [

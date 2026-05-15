@@ -739,5 +739,26 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 42-6: CourseSearchBar 자동완성 드롭다운 (200ms debounce, 키보드 탐색, 외부클릭 닫기)
 - [x] STEP 42-7: tsc OK, 빌드 성공, SC1~6 전부 통과 — ES 검색/자동완성/일반목록/컨테이너 에러 없음
 
+## STEP 43: README 업데이트 + Kibana 대시보드 임베드 페이지 (2026-05-15)
+- [x] STEP 43-1: README.md 업데이트 (Kibana, ELK, 완료 로드맵 항목)
+- [x] STEP 43-2: /lms-manage/analytics 페이지 신규 생성 (Kibana iframe 임베드)
+- [x] STEP 43-3: AdminNav 사이드바 "접속 통계" 메뉴 추가
+- [x] STEP 43-4: 빌드 + 배포 + 검증
+  - npm run build 완전 통과 (TypeScript OK) ✓
+  - Docker 이미지 재빌드 + 컨테이너 교체 ✓
+  - /lms-manage/analytics 200 ✓
+  - AdminNav "접속 통계" 메뉴 추가 (Activity 아이콘, 초기 BarChart2 → 중복 해소) ✓
+  - Kibana iframe 임베드 완료 ✓
+  - iframe src 상대경로 변경 (/kibana/app/dashboards#/view/...) ✓
+  - nginx /kibana/ location: proxy_hide_header X-Content-Type-Options 추가 ✓
+    proxy_hide_header Content-Security-Policy 제거 → Kibana 자체 CSP(nonce) 통과 ✓
+    add_header HSTS + X-Content-Type-Options → 서버 레벨 LMS CSP 상속 차단 ✓
+    "Please upgrade your browser" 오류 해결 ✓
+
+## STEP 44: 코드 정리 + git commit & push (2026-05-15)
+- [x] STEP 44-1: AdminNav.tsx BarChart2 unused import 제거
+- [x] STEP 44-2: tsc 에러 없음 확인 (BarChart2 출석·성적에서 사용 중 → import 유지, Activity가 접속 통계 전용)
+- [ ] STEP 44-3: git commit & push
+
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
