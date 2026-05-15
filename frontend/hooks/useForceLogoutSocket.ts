@@ -77,5 +77,5 @@ export function useForceLogoutSocket() {
       socketRef.current?.disconnect()
       socketRef.current = null
     }
-  }, [token, user?.id]) // user?.id — 사용자 변경 시 재연결
+  }, [token, user])
 }
