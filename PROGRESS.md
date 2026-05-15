@@ -865,12 +865,17 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 55-5: git commit (de9810b0) & push → eae3d664..de9810b0 main -> main
 
 ## STEP 56: CI Elasticsearch Mock 처리 (2026-05-15)
-- [ ] STEP 56-1: config/elasticsearch.php에 enabled 키 추가
-- [ ] STEP 56-2: ElasticsearchService::isEnabled() 메서드 추가
-- [ ] STEP 56-3: CourseObserver — isEnabled() 체크 후 skip
-- [ ] STEP 56-4: TestCase::setUp() — ElasticsearchService mock 바인딩
-- [ ] STEP 56-5: php artisan test 통과 확인
-- [ ] STEP 56-6: git commit & push
+- [x] STEP 56-1: config/elasticsearch.php에 enabled 키 추가
+- [x] STEP 56-2: ElasticsearchService::isEnabled() static 메서드 추가
+- [x] STEP 56-3: CourseObserver — isEnabled() 체크 후 skip (saved/deleted 양쪽)
+- [x] STEP 56-4: TestCase::setUp() — ELASTICSEARCH_ENABLED=false 시 mock 바인딩
+- [x] STEP 56-5: php artisan test → 31 passed, 0 failed ✓
+- [x] STEP 56-6: git commit (90545694) & push → de9810b0..90545694 main -> main
+
+## STEP 57: GitHub Actions Node.js 24 대응 (2026-05-15)
+- [ ] STEP 57-1: ci.yml actions 버전 업 (checkout/cache/upload-artifact/setup-node v5)
+- [ ] STEP 57-2: deploy.yml actions/checkout v5
+- [ ] STEP 57-3: git commit & push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
