@@ -856,11 +856,21 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
   - ExampleTest: 1개
 
 ## STEP 55: Exam/Assignment 테스트 추가 + git push (2026-05-15)
-- [ ] STEP 55-1: tests/Feature/Exam/ExamTest.php 작성
-- [ ] STEP 55-2: tests/Feature/Exam/AssignmentTest.php 작성
-- [ ] STEP 55-3: Factory 보완 (AssignmentFactory, ExamSubmission HasFactory)
-- [ ] STEP 55-4: php artisan test --testsuite=Feature 전체 통과 확인
-- [ ] STEP 55-5: git commit & push
+- [x] STEP 55-1: tests/Feature/Exam/ExamTest.php 작성 (6케이스)
+- [x] STEP 55-2: tests/Feature/Exam/AssignmentTest.php 작성 (5케이스)
+- [x] STEP 55-3: Factory 보완 (ExamQuestion HasFactory 추가)
+- [x] STEP 55-4: php artisan test --testsuite=Feature → 31 passed, 0 failed ✓
+  - ExamTest: 시험 조회·시작·정답/오답 제출·재응시 422·미인증·미수강 403
+  - AssignmentTest: 과제 조회·제출·중복 422·미인증·기한 만료 422
+- [x] STEP 55-5: git commit (de9810b0) & push → eae3d664..de9810b0 main -> main
+
+## STEP 56: CI Elasticsearch Mock 처리 (2026-05-15)
+- [ ] STEP 56-1: config/elasticsearch.php에 enabled 키 추가
+- [ ] STEP 56-2: ElasticsearchService::isEnabled() 메서드 추가
+- [ ] STEP 56-3: CourseObserver — isEnabled() 체크 후 skip
+- [ ] STEP 56-4: TestCase::setUp() — ElasticsearchService mock 바인딩
+- [ ] STEP 56-5: php artisan test 통과 확인
+- [ ] STEP 56-6: git commit & push
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고

@@ -23,6 +23,11 @@ class ElasticsearchService
         $this->prefix = config('elasticsearch.index_prefix', 'lms_');
     }
 
+    public static function isEnabled(): bool
+    {
+        return (bool) config('elasticsearch.enabled', true);
+    }
+
     public function index(string $index, string|int $id, array $body): void
     {
         $this->client->index([
