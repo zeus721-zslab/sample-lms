@@ -882,5 +882,9 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 - [x] STEP 58-2: useForceLogoutSocket.ts deps [token, user?.id] → [token, user] (ESLint 경고 0 확인)
 - [x] STEP 58-3: git commit (c1fd9bb7) & push → a80629cd..c1fd9bb7 main -> main
 
+## STEP 59: CI upload-artifact 제거 (2026-05-15)
+- [x] STEP 59-1: ci.yml Upload coverage 스텝 제거 + --coverage-clover 옵션 제거
+- [x] STEP 59-2: git commit (6b341acd) & push → c1fd9bb7..6b341acd main -> main
+
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
