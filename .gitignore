@@ -76,3 +76,6 @@ CLAUDE.md.bak
 
 .copilot/
 temp-*/
+
+# 보안 스캔 결과
+scan-*.txt

@@ -42,6 +42,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # PHP 설정
 COPY docker/php/php.ini $PHP_INI_DIR/conf.d/99-lms.ini
 
+# wait-for-it + entrypoint
+COPY docker/wait-for-it.sh /usr/local/bin/wait-for-it.sh
+COPY docker/php/entrypoint.sh /entrypoint.sh
+RUN chmod +x /usr/local/bin/wait-for-it.sh /entrypoint.sh
+
 WORKDIR /app
 
 # 의존성만 먼저 복사 (레이어 캐싱 최적화)
@@ -57,4 +62,5 @@ RUN chown -R www-data:www-data /app \
     && chmod -R 755 /app/bootstrap/cache
 
 # FrankenPHP worker 모드 실행 (CMD 오버라이드 없이 Caddyfile 사용)
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
