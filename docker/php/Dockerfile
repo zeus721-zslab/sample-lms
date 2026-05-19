@@ -51,6 +51,8 @@ WORKDIR /app
 
 # 의존성만 먼저 복사 (레이어 캐싱 최적화)
 COPY backend/composer.json backend/composer.lock ./
+# composer.json path 레포지토리가 /home/zslab-infra/zslab-search를 참조하므로 빌드 시 미리 복사
+COPY backend/packages/zslab-search /home/zslab-infra/zslab-search
 RUN composer install --no-dev --prefer-dist --optimize-autoloader --no-scripts
 
 # 소스 전체 복사

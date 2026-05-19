@@ -10,6 +10,11 @@
 - 전체 완료 후 요약 보고
 ---
 
+## Dockerfile zslab-search 경로 수정 (2026-05-19)
+- [x] STEP 1: Dockerfile 위치 및 구조 확인
+- [x] STEP 2: composer install 전 COPY 추가
+- [ ] STEP 3: git commit
+
 ## 전체 STEP 목록
 - [x] STEP 1: 디렉토리 구조 생성 및 PROGRESS.md 초기화
 - [x] STEP 2: .env.example 작성
@@ -938,4 +943,4 @@ PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
 ## STEP ES-CI: zslab-search 패키지 복사본 추가 + CI 대응 + 커밋 (2026-05-19)
 - [x] STEP ES-CI-1: backend/packages/zslab-search 복사 (/home/zslab-infra/zslab-search → backend/packages/zslab-search) ※ 직접 cp 권한 없음 → docker exec cat으로 11개 파일 복사 완료
 - [x] STEP ES-CI-2: ci.yml "Install Composer dependencies" 앞에 "Prepare local packages" 스텝 추가
-- [ ] STEP ES-CI-3: git add (대상 파일 목록 per 요청) + commit
+- [x] STEP ES-CI-3: git add (대상 파일 목록 per 요청) + commit (2b037dd3) — 25 files changed, 949 insertions(+), 125 deletions(-)
