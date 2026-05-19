@@ -84,6 +84,7 @@ class SearchBuilder
                     'fields'              => $this->fields,
                     'analyzer'            => 'nori_search_analyzer',
                     'type'                => 'best_fields',
+                    'operator'            => 'and',
                     'fuzziness'           => 'AUTO',
                     'prefix_length'       => 1,
                     'fuzzy_transpositions' => true,
@@ -97,11 +98,22 @@ class SearchBuilder
                 ],
             ];
             if ($this->fuzzyField !== '') {
-                $should[] = [
-                    'match_phrase_prefix' => [
-                        $this->fuzzyField => JamoConverter::convert($this->keyword),
-                    ],
-                ];
+                $jamoKeyword = JamoConverter::convert($this->keyword);
+                $tokens      = array_values(array_filter(explode(' ', $jamoKeyword), fn($t) => $t !== ''));
+
+                if (count($tokens) <= 1) {
+                    $should[] = [
+                        'match_phrase_prefix' => [
+                            $this->fuzzyField => $jamoKeyword,
+                        ],
+                    ];
+                } else {
+                    $mustClauses = [];
+                    foreach ($tokens as $token) {
+                        $mustClauses[] = ['match' => [$this->fuzzyField => $token]];
+                    }
+                    $should[] = ['bool' => ['must' => $mustClauses]];
+                }
             }
         }
 

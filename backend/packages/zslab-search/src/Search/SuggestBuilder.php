@@ -66,19 +66,36 @@ class SuggestBuilder
         $shouldClauses = [
             [
                 'multi_match' => [
-                    'query'  => $this->keyword,
-                    'type'   => 'bool_prefix',
-                    'fields' => $fields,
+                    'query'    => $this->keyword,
+                    'type'     => 'bool_prefix',
+                    'fields'   => $fields,
+                    'operator' => 'and',
                 ],
             ],
         ];
 
         if ($this->fuzzyField !== '') {
-            $shouldClauses[] = [
-                'match_phrase_prefix' => [
-                    $this->fuzzyField => JamoConverter::convert($this->keyword),
-                ],
-            ];
+            $jamoKeyword = JamoConverter::convert($this->keyword);
+            $tokens      = array_values(array_filter(explode(' ', $jamoKeyword), fn($t) => $t !== ''));
+
+            if (count($tokens) <= 1) {
+                $shouldClauses[] = [
+                    'match_phrase_prefix' => [
+                        $this->fuzzyField => $jamoKeyword,
+                    ],
+                ];
+            } else {
+                $mustClauses = [];
+                foreach (array_slice($tokens, 0, -1) as $token) {
+                    $mustClauses[] = ['match' => [$this->fuzzyField => $token]];
+                }
+                $mustClauses[] = [
+                    'match_phrase_prefix' => [
+                        $this->fuzzyField => end($tokens),
+                    ],
+                ];
+                $shouldClauses[] = ['bool' => ['must' => $mustClauses]];
+            }
         }
 
         $response = $this->client->search($this->indexName, [
