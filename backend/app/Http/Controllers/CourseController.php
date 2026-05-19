@@ -117,7 +117,7 @@ class CourseController extends Controller
         $results = app(SuggestBuilder::class)
             ->index(Course::getSearchIndex())
             ->field('title_suggest')
-            ->fuzzyField('title')
+            ->fuzzyField('title_jamo')
             ->query($keyword)
             ->size(8)
             ->suggest();

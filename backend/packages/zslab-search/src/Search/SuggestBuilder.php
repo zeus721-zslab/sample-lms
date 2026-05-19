@@ -3,6 +3,7 @@
 namespace Zslab\Search\Search;
 
 use Zslab\Search\Client\ElasticsearchClient;
+use Zslab\Search\Utils\JamoConverter;
 
 class SuggestBuilder
 {
@@ -62,8 +63,6 @@ class SuggestBuilder
             $this->field . '._3gram',
         ];
 
-        $keywordLen = mb_strlen($this->keyword);
-
         $shouldClauses = [
             [
                 'multi_match' => [
@@ -74,15 +73,10 @@ class SuggestBuilder
             ],
         ];
 
-        if ($keywordLen >= 3) {
-            $fuzziness = $keywordLen >= 5 ? 'AUTO' : '1';
+        if ($this->fuzzyField !== '') {
             $shouldClauses[] = [
-                'multi_match' => [
-                    'query'                => $this->keyword,
-                    'fields'               => [$this->fuzzyField ?: $this->field],
-                    'fuzziness'            => $fuzziness,
-                    'prefix_length'        => 1,
-                    'fuzzy_transpositions' => true,
+                'match_phrase_prefix' => [
+                    $this->fuzzyField => JamoConverter::convert($this->keyword),
                 ],
             ];
         }

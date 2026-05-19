@@ -3,12 +3,14 @@
 namespace Zslab\Search\Search;
 
 use Zslab\Search\Client\ElasticsearchClient;
+use Zslab\Search\Utils\JamoConverter;
 
 class SearchBuilder
 {
     private string   $indexName  = '';
     private array    $fields     = [];
     private string   $keyword    = '';
+    private string   $fuzzyField = '';
     private array    $filters    = [];
     private int      $currentPage = 1;
     private int      $perPage    = 20;
@@ -22,6 +24,7 @@ class SearchBuilder
         $this->indexName   = $name;
         $this->fields      = [];
         $this->keyword     = '';
+        $this->fuzzyField  = '';
         $this->filters     = [];
         $this->currentPage = 1;
         $this->perPage     = 20;
@@ -51,6 +54,12 @@ class SearchBuilder
     {
         $this->currentPage = max(1, $page);
         $this->perPage     = max(1, $size);
+        return $this;
+    }
+
+    public function fuzzyField(string $field): static
+    {
+        $this->fuzzyField = $field;
         return $this;
     }
 
@@ -87,6 +96,13 @@ class SearchBuilder
                     'type'   => 'phrase_prefix',
                 ],
             ];
+            if ($this->fuzzyField !== '') {
+                $should[] = [
+                    'match_phrase_prefix' => [
+                        $this->fuzzyField => JamoConverter::convert($this->keyword),
+                    ],
+                ];
+            }
         }
 
         $bool = [];

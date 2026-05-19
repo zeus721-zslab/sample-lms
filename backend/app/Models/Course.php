@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Zslab\Search\Contracts\Searchable;
+use Zslab\Search\Utils\JamoConverter;
 
 class Course extends Model implements Searchable
 {
@@ -84,6 +85,7 @@ class Course extends Model implements Searchable
             'category'      => $this->category?->name,
             'instructor'    => $this->instructor?->name,
             'title_suggest' => $this->title,
+            'title_jamo'    => JamoConverter::convert($this->title),
         ];
     }
 

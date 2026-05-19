@@ -47,6 +47,16 @@ class AnalyzerPresets
                         'tokenizer' => 'nori_tokenizer',
                         'filter'    => ['nori_posfilter', 'nori_readingform', 'lowercase'],
                     ],
+                    'jamo_analyzer' => [
+                        'type'      => 'custom',
+                        'tokenizer' => 'whitespace',
+                        'filter'    => ['lowercase'],
+                    ],
+                    'jamo_search_analyzer' => [
+                        'type'      => 'custom',
+                        'tokenizer' => 'standard',
+                        'filter'    => ['lowercase'],
+                    ],
                 ],
             ],
         ];

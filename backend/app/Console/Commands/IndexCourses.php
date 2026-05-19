@@ -22,6 +22,7 @@ class IndexCourses extends Command
             'category'      => ['type' => 'text', 'analyzer' => 'nori_ngram_analyzer', 'search_analyzer' => 'nori_search_analyzer', 'fields' => ['keyword' => ['type' => 'keyword']]],
             'instructor'    => ['type' => 'text', 'analyzer' => 'nori_ngram_analyzer', 'search_analyzer' => 'nori_search_analyzer'],
             'title_suggest' => ['type' => 'search_as_you_type'],
+            'title_jamo'    => ['type' => 'text', 'analyzer' => 'jamo_analyzer', 'search_analyzer' => 'jamo_search_analyzer'],
         ],
     ];
 
