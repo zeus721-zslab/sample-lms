@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c45824ec36f5a29f10a72fb7e0f6fbe",
+    "content-hash": "fc4a7e3cd3a2213fcf83f2a47889d101",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7158,6 +7158,37 @@
                 }
             ],
             "time": "2026-04-26T05:33:54+00:00"
+        },
+        {
+            "name": "zslab/search",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "/home/zslab-infra/zslab-search",
+                "reference": "cc20fb99a7cccd1aaca2b6889695a5edd4609405"
+            },
+            "require": {
+                "elasticsearch/elasticsearch": "^8.0",
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Zslab\\Search\\ZslabSearchServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zslab\\Search\\": "src/"
+                }
+            },
+            "description": "Zslab 공용 Elasticsearch 검색 패키지",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         }
     ],
     "packages-dev": [

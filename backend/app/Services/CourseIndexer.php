@@ -8,9 +8,9 @@ class CourseIndexer
 {
     const INDEX = 'courses';
 
-    private ElasticsearchService $es;
+    private ElasticsearchServiceLegacy $es;
 
-    public function __construct(ElasticsearchService $es)
+    public function __construct(ElasticsearchServiceLegacy $es)
     {
         $this->es = $es;
     }

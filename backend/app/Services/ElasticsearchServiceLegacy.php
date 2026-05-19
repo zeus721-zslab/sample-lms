@@ -5,7 +5,7 @@ namespace App\Services;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
 
-class ElasticsearchService
+class ElasticsearchServiceLegacy
 {
     private Client $client;
     private string $prefix;

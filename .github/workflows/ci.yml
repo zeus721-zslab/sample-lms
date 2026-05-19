@@ -46,6 +46,11 @@ jobs:
           key: composer-${{ hashFiles('backend/composer.lock') }}
           restore-keys: composer-
 
+      - name: Prepare local packages
+        run: |
+          sudo mkdir -p /home/zslab-infra
+          sudo cp -r backend/packages/zslab-search /home/zslab-infra/zslab-search
+
       - name: Install dependencies
         working-directory: backend
         run: composer install --no-interaction --prefer-dist --optimize-autoloader

@@ -4,7 +4,6 @@ namespace Tests;
 
 use App\Models\Role;
 use App\Models\User;
-use App\Services\ElasticsearchService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,20 +11,7 @@ abstract class TestCase extends BaseTestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // ES가 비활성화된 경우 mock으로 교체 (CI/테스트 환경)
-        if (!ElasticsearchService::isEnabled()) {
-            $this->mock(ElasticsearchService::class, function ($mock) {
-                $mock->shouldReceive('index')->andReturnNull();
-                $mock->shouldReceive('delete')->andReturnNull();
-                $mock->shouldReceive('search')->andReturn([]);
-                $mock->shouldReceive('ensureIndex')->andReturnNull();
-            });
-        }
-    }
+    // ELASTICSEARCH_ENABLED=false in phpunit.xml — ElasticsearchClient handles disabled state internally (all ops are no-ops)
 
     protected function createStudent(array $attrs = []): User
     {

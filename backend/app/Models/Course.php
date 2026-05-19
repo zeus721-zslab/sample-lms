@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Zslab\Search\Contracts\Searchable;
 
-class Course extends Model
+class Course extends Model implements Searchable
 {
     use HasFactory;
 
@@ -67,5 +68,32 @@ class Course extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', 'published');
+    }
+
+    public function toSearchArray(): array
+    {
+        $this->loadMissing('category', 'instructor');
+
+        return [
+            'id'            => $this->id,
+            'title'         => $this->title,
+            'description'   => $this->description,
+            'slug'          => $this->slug,
+            'course_type'   => $this->course_type,
+            'status'        => $this->status,
+            'category'      => $this->category?->name,
+            'instructor'    => $this->instructor?->name,
+            'title_suggest' => $this->title,
+        ];
+    }
+
+    public static function getSearchIndex(): string
+    {
+        return 'lms_courses';
+    }
+
+    public static function getSearchFields(): array
+    {
+        return ['title^3', 'description', 'category', 'instructor'];
     }
 }

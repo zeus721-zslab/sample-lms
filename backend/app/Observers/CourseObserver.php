@@ -3,28 +3,30 @@
 namespace App\Observers;
 
 use App\Models\Course;
-use App\Services\CourseIndexer;
-use App\Services\ElasticsearchService;
+use Zslab\Search\Client\ElasticsearchClient;
 
 class CourseObserver
 {
-    public function __construct(private CourseIndexer $indexer) {}
+    public function __construct(private ElasticsearchClient $client) {}
 
     public function saved(Course $course): void
     {
-        if (!ElasticsearchService::isEnabled()) {
+        if (!$this->client->isEnabled()) return;
+
+        $course->loadMissing('category', 'instructor');
+
+        if ($course->status !== 'published') {
+            $this->client->delete(Course::getSearchIndex(), $course->id);
             return;
         }
 
-        $this->indexer->indexCourse($course->load('category'));
+        $this->client->index(Course::getSearchIndex(), $course->id, $course->toSearchArray());
     }
 
     public function deleted(Course $course): void
     {
-        if (!ElasticsearchService::isEnabled()) {
-            return;
-        }
+        if (!$this->client->isEnabled()) return;
 
-        $this->indexer->deleteCourse($course->id);
+        $this->client->delete(Course::getSearchIndex(), $course->id);
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Course;
-use App\Services\ElasticsearchService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Zslab\Search\Search\PaginatedResult;
+use Zslab\Search\Search\SearchBuilder;
+use Zslab\Search\Search\SuggestBuilder;
 
 class CourseController extends Controller
 {
@@ -46,75 +49,63 @@ class CourseController extends Controller
 
     private function esSearch(string $keyword, string $type, string $catSlug, int $page, int $perPage): JsonResponse
     {
-        try {
-            $es = app(ElasticsearchService::class);
+        $filters = ['status' => 'published'];
+        if ($type) { $filters['course_type'] = $type; }
+        if ($catSlug) {
+            $cat = Category::where('slug', $catSlug)->first();
+            if ($cat) { $filters['category.keyword'] = $cat->name; }
+        }
 
-            $filters = [['term' => ['status' => 'published']]];
-            if ($type)    { $filters[] = ['term' => ['course_type' => $type]]; }
-            if ($catSlug) {
-                // category slug → name lookup
-                $cat = \App\Models\Category::where('slug', $catSlug)->first();
-                if ($cat) { $filters[] = ['term' => ['category' => $cat->name]]; }
-            }
+        $result = app(SearchBuilder::class)
+            ->index(Course::getSearchIndex())
+            ->fields(Course::getSearchFields())
+            ->query($keyword)
+            ->filter($filters)
+            ->page($page, $perPage)
+            ->fallback(function () use ($keyword, $type, $catSlug, $page, $perPage) {
+                $query = Course::published()
+                    ->select(['id'])
+                    ->where('title', 'like', '%' . $keyword . '%');
+                if ($type) { $query->where('course_type', $type); }
+                if ($catSlug) { $query->whereHas('category', fn ($q) => $q->where('slug', $catSlug)); }
 
-            $from = ($page - 1) * $perPage;
+                $paginator = $query->orderBy('id')->paginate($perPage, ['*'], 'page', $page);
 
-            $result = $es->search('courses', [
-                'from' => $from,
-                'size' => $perPage,
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            'multi_match' => [
-                                'query'  => $keyword,
-                                'fields' => ['title^3', 'description', 'category', 'instructor'],
-                                'type'   => 'best_fields',
-                                'fuzziness' => 'AUTO',
-                            ],
-                        ],
-                        'filter' => $filters,
-                    ],
-                ],
-            ]);
+                return new PaginatedResult(
+                    total:       $paginator->total(),
+                    currentPage: $page,
+                    perPage:     $perPage,
+                    data:        [],
+                    ids:         array_map(fn ($c) => $c->id, $paginator->items()),
+                );
+            })
+            ->search();
 
-            $hits  = $result['hits']['hits'];
-            $total = $result['hits']['total']['value'];
-            $ids   = array_map(fn($h) => (int) $h['_id'], $hits);
-
-            $courses = Course::with(['category:id,code,name,slug', 'instructor:id,name'])
-                ->select(['id','course_type','category_id','title','slug','description','thumbnail','credit_hours','total_lessons','price','instructor_id','mode'])
+        $ids = array_map('intval', $result->ids);
+        $courses = $ids
+            ? Course::with(['category:id,code,name,slug', 'instructor:id,name'])
+                ->select(['id', 'course_type', 'category_id', 'title', 'slug', 'description', 'thumbnail', 'credit_hours', 'total_lessons', 'price', 'instructor_id', 'mode'])
                 ->whereIn('id', $ids)
                 ->get()
-                ->sortBy(fn($c) => array_search($c->id, $ids))
-                ->values();
+                ->sortBy(fn ($c) => array_search($c->id, $ids))
+                ->values()
+            : collect();
 
-            $lastPage = max(1, (int) ceil($total / $perPage));
-
-            return response()->json([
-                'data'         => $courses,
-                'total'        => $total,
-                'per_page'     => $perPage,
-                'current_page' => $page,
-                'last_page'    => $lastPage,
-                'from'         => $from + 1,
-                'to'           => min($from + $perPage, $total),
-            ]);
-        } catch (\Throwable $e) {
-            // ES 장애 시 DB LIKE 폴백
-            $query = Course::published()
-                ->with(['category:id,code,name,slug', 'instructor:id,name'])
-                ->select(['id','course_type','category_id','title','slug','description','thumbnail','credit_hours','total_lessons','price','instructor_id','mode'])
-                ->where('title', 'like', '%' . $keyword . '%');
-            if ($type)    { $query->where('course_type', $type); }
-            if ($catSlug) { $query->whereHas('category', fn($q) => $q->where('slug', $catSlug)); }
-
-            return response()->json($query->orderBy('id')->paginate($perPage));
-        }
+        $from = ($page - 1) * $perPage;
+        return response()->json([
+            'data'         => $courses,
+            'total'        => $result->total,
+            'per_page'     => $perPage,
+            'current_page' => $page,
+            'last_page'    => $result->lastPage,
+            'from'         => $from + 1,
+            'to'           => min($from + $perPage, $result->total),
+        ]);
     }
 
     /**
      * GET /api/courses/suggest?q=검색어
-     * ES completion suggester 기반 자동완성
+     * ES search_as_you_type 기반 자동완성
      */
     public function suggest(Request $request): JsonResponse
     {
@@ -123,34 +114,22 @@ class CourseController extends Controller
             return response()->json([]);
         }
 
-        try {
-            $es = app(ElasticsearchService::class);
-            $result = $es->search('courses', [
-                'suggest' => [
-                    'course_suggest' => [
-                        'prefix'     => $keyword,
-                        'completion' => [
-                            'field' => 'suggest',
-                            'size'  => 8,
-                        ],
-                    ],
-                ],
-                '_source' => false,
-            ]);
+        $results = app(SuggestBuilder::class)
+            ->index(Course::getSearchIndex())
+            ->field('title_suggest')
+            ->fuzzyField('title')
+            ->query($keyword)
+            ->size(8)
+            ->suggest();
 
-            $options = $result['suggest']['course_suggest'][0]['options'] ?? [];
-            $suggestions = array_map(fn($o) => $o['text'], $options);
-
-            return response()->json($suggestions);
-        } catch (\Throwable) {
-            // ES 장애 시 DB LIKE 폴백
-            $titles = Course::published()
-                ->where('title', 'like', '%' . $keyword . '%')
-                ->limit(8)
-                ->pluck('title');
-
-            return response()->json($titles);
+        if (!empty($results)) {
+            return response()->json(array_map(fn ($s) => $s['title'] ?? '', $results));
         }
+
+        // DB fallback (ES 비활성 또는 오류)
+        return response()->json(
+            Course::published()->where('title', 'like', '%' . $keyword . '%')->limit(8)->pluck('title')
+        );
     }
 
     /**

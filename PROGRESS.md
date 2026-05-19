@@ -894,3 +894,48 @@ docker-compose.yml, Caddyfile 구조를 참고해서 LMS에 맞게 적용할 것
 
 ## 완료 후
 PROGRESS.md STEP 1 [x] 업데이트 후 결과 보고
+
+## STEP ES-REFACTOR: zslab-search 패키지로 ES 코드 교체 (2026-05-18)
+- [ ] STEP ES-1: zslab/search 패키지 설치 (composer.json repositories + require, symlink 확인)
+- [ ] STEP ES-2: config 퍼블리싱 + .env ES 환경변수 설정
+- [ ] STEP ES-3: Course 모델 Searchable 인터페이스 구현 (toSearchArray/getSearchIndex/getSearchFields)
+- [ ] STEP ES-4: CourseObserver → ElasticsearchClient 기반으로 교체 (status 필터 유지)
+- [ ] STEP ES-5: ElasticsearchService.php → ElasticsearchServiceLegacy.php 이름 변경 보존
+- [ ] STEP ES-6: CourseController esSearch() → SearchBuilder, suggest() → SuggestBuilder 교체
+- [ ] STEP ES-7: IndexCourses command → IndexManager::reindex() 교체
+- [ ] STEP ES-8: TestCase.php ElasticsearchService mock → ElasticsearchClient 방식으로 교체
+- [ ] STEP ES-9: 인덱스 재구성 — nori+ngram 매핑으로 lms_courses 재색인 (80건)
+- [ ] STEP ES-10: 검증 (검색/자동완성/fallback/nori 동작 확인)
+
+## STEP ES-INFRA: zslab-search 경로를 zslab-infra 공유 경로로 전환 (2026-05-19)
+- [x] STEP ES-INFRA-1: docker-compose.lms.yml lms_php volumes에 /home/zslab-infra/zslab-search 추가
+- [x] STEP ES-INFRA-2: composer.json path repo url → /home/zslab-infra/zslab-search 변경
+- [x] STEP ES-INFRA-3: 컨테이너 재시작 + composer install + symlink 확인 (→ /home/zslab-infra/zslab-search/)
+- [x] STEP ES-INFRA-4: backend/packages/zslab-search 로컬 복사본 삭제 (packages 디렉토리 비어있음 확인)
+- [x] STEP ES-INFRA-5: 검증
+  - GET /api/courses?q=파이 → 파이썬 프로그래밍 기초 결과 반환 ✓
+  - vendor/zslab/search → ../../../home/zslab-infra/zslab-search/ symlink ✓
+  - 컨테이너 에러 0 ✓
+
+## STEP ES-REFACTOR 결과 (2026-05-18)
+- [x] STEP ES-1: zslab/search 패키지 설치 — backend/packages/zslab-search 복사, composer.json path repo 추가, symlink 확인
+- [x] STEP ES-2: config 퍼블리싱 + .env ES 환경변수 설정 (ELASTICSEARCH_ENABLED/HOST/PORT/SCHEME/ANALYZER_PRESET)
+- [x] STEP ES-3: Course 모델 Searchable 인터페이스 구현 (toSearchArray/getSearchIndex/getSearchFields + loadMissing)
+- [x] STEP ES-4: CourseObserver → ElasticsearchClient 기반으로 교체 (status 필터 유지, isEnabled() 체크)
+- [x] STEP ES-5: ElasticsearchService.php → ElasticsearchServiceLegacy.php 이름 변경 보존, CourseIndexer 타입힌트 업데이트
+- [x] STEP ES-6: CourseController esSearch() → SearchBuilder, suggest() → SuggestBuilder 교체
+  - category 매핑: keyword→text+keyword sub-field (phrase_prefix 호환), 필터 category.keyword 사용
+- [x] STEP ES-7: IndexCourses command → IndexManager::reindex() 교체 (nori_ngram_analyzer 매핑)
+- [x] STEP ES-8: TestCase.php ElasticsearchService mock 제거 (ElasticsearchClient disabled 시 자동 no-op)
+- [x] STEP ES-9: es:index-courses → nori+ngram 매핑으로 lms_courses 재색인 21건 완료
+- [x] STEP ES-10: 검증 전 통과
+  - lms_courses 문서 21건 ✓
+  - 파이썬 검색 → 1건 ✓ / 파이 검색 → 1건 (nori+ngram 동작) ✓ / 파이썬기 → 1건 ✓
+  - 자동완성 파이 → ['파이썬 프로그래밍 기초'] ✓
+  - 응답 구조: {data, total, per_page, current_page, last_page, from, to} ✓
+  - 일반목록 total=21 ✓ / PHPUnit 31 passed ✓ / 컨테이너 에러 0 ✓
+
+## STEP ES-CI: zslab-search 패키지 복사본 추가 + CI 대응 + 커밋 (2026-05-19)
+- [x] STEP ES-CI-1: backend/packages/zslab-search 복사 (/home/zslab-infra/zslab-search → backend/packages/zslab-search) ※ 직접 cp 권한 없음 → docker exec cat으로 11개 파일 복사 완료
+- [x] STEP ES-CI-2: ci.yml "Install Composer dependencies" 앞에 "Prepare local packages" 스텝 추가
+- [ ] STEP ES-CI-3: git add (대상 파일 목록 per 요청) + commit

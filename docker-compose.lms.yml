@@ -59,6 +59,7 @@ services:
     volumes:
       - ./backend:/app:cached
       - ./backend/storage:/app/storage
+      - ${ZSLAB_SEARCH_PATH}:/home/zslab-infra/zslab-search:ro
     networks:
       - lms_net
       - zslab_net          # MariaDB · Redis · ES 접근
@@ -158,6 +159,7 @@ services:
     command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
     volumes:
       - ./backend:/app:cached
+      - ${ZSLAB_SEARCH_PATH}:/home/zslab-infra/zslab-search:ro
     networks:
       - lms_net
       - zslab_net
@@ -177,6 +179,7 @@ services:
       sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
     volumes:
       - ./backend:/app:cached
+      - ${ZSLAB_SEARCH_PATH}:/home/zslab-infra/zslab-search:ro
     networks:
       - lms_net
       - zslab_net
